@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Food Concepts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Reset and general styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.6;
+      background-color: #f0f2f5;
+      color: #333;
+    }
+
+    /* Header styles */
+    .header {
+      background-color: #1a73e8;
+      color: #ffffff;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header__title {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Dashboard styles */
+    .dashboard {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .dashboard-card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1rem;
+      margin: 1rem;
+      flex: 1 1 300px;
+      max-width: 400px;
+      transition: transform 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .dashboard-card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #1a73e8;
+    }
+
+    /* MES section styles */
+    .mes-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    .mes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .mes-section {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .mes-section:hover {
+      transform: translateY(-5px);
+    }
+
+    .mes-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #1a73e8;
+    }
+
+    .mes-label {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 800px;
+      border-radius: 8px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Chart styles */
+    .chart-container {
+      position: relative;
+      margin: auto;
+      height: 300px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1 class="header__title">Global Food Concepts Inc.</h1>
+    <p>Manufacturing Execution System Dashboard</p>
+  </header>
+
+  <main>
+    <section class="dashboard">
+      <div class="dashboard-card">
+        <h2>Production Overview</h2>
+        <div class="chart-container">
+          <canvas id="productionChart"></canvas>
+        </div>
+        <p>Total Units Produced: 1350</p>
+        <p>Average Daily Output: 225 units</p>
+      </div>
+      <div class="dashboard-card">
+        <h2>Quality Metrics</h2>
+        <div class="chart-container">
+          <canvas id="qualityChart"></canvas>
+        </div>
+        <p>Defect Rate: 5%</p>
+        <p>Average Defects per Month: 8</p>
+      </div>
+      <div class="dashboard-card">
+        <h2>Inventory Levels</h2>
+        <div class="chart-container">
+          <canvas id="inventoryChart"></canvas>
+        </div>
+        <p>Raw Materials: 300 units</p>
+        <p>Work-in-Progress: 200 units</p>
+        <p>Finished Goods: 100 units</p>
+      </div>
+    </section>
+
+    <section class="mes-container">
+      <div class="mes-grid">
+        <div class="mes-section" data-modal="production">
+          <i class="mes-icon fas fa-industry"></i>
+          <div class="mes-label">Production</div>
+        </div>
+        <div class="mes-section" data-modal="maintenance">
+          <i class="mes-icon fas fa-wrench"></i>
+          <div class="mes-label">Maintenance</div>
+        </div>
+        <div class="mes-section" data-modal="quality">
+          <i class="mes-icon fas fa-check-circle"></i>
+          <div class="mes-label">Quality Control</div>
+        </div>
+        <div class="mes-section" data-modal="inventory">
+          <i class="mes-icon fas fa-warehouse"></i>
+          <div class="mes-label">Inventory</div>
+        </div>
+        <div class="mes-section" data-modal="planning">
+          <i class="mes-icon fas fa-calendar-alt"></i>
+          <div class="mes-label">Planning</div>
+        </div>
+        <div class="mes-section" data-modal="shipping">
+          <i class="mes-icon fas fa-shipping-fast"></i>
+          <div class="mes-label">Shipping</div>
+        </div>
+        <div class="mes-section" data-modal="compliance">
+          <i class="mes-icon fas fa-balance-scale"></i>
+          <div class="mes-label">Compliance</div>
+        </div>
+        <div class="mes-section" data-modal="analytics">
+          <i class="mes-icon fas fa-chart-line"></i>
+          <div class="mes-label">Analytics</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Content -->
+    <div id="production-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Production Details</h2>
+        <p>Monthly Production Statistics:</p>
+        <ul>
+          <li>January: 100 units</li>
+          <li>February: 150 units</li>
+          <li>March: 200 units</li>
+          <li>April: 250 units</li>
+          <li>May: 300 units</li>
+          <li>June: 350 units</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="maintenance-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Maintenance Details</h2>
+        <p>Upcoming Maintenance Activities:</p>
+        <ul>
+          <li>Machine A101 - Scheduled Maintenance on 2024-07-01</li>
+          <li>Machine B202 - Calibration on 2024-07-05</li>
+        </ul>
+        <p>Recent Maintenance History:</p>
+        <ul>
+          <li>Machine C303 - Preventive Maintenance on 2024-06-10</li>
+          <li>Machine D404 - Corrective Maintenance on 2024-06-15</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="quality-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Quality Control Details</h2>
+        <p>Quality Checkpoints:</p>
+        <ul>
+          <li>Raw Material Inspection - Daily</li>
+          <li>In-Process Inspection - Hourly</li>
+          <li>Final Product Inspection - End of Shift</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="inventory-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Inventory Details</h2>
+        <p>Inventory Summary:</p>
+        <ul>
+          <li>Raw Materials: 300 units</li>
+          <li>Work-in-Progress: 200 units</li>
+          <li>Finished Goods: 100 units</li>
+        </ul>
+        <p>Recent Stock Movements:</p>
+        <ul>
+          <li>Received 500 units of raw materials on 2024-06-20</li>
+          <li>Shipped 200 units of finished goods on 2024-06-25</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="planning-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Planning Details</h2>
+        <p>Production Planning for July:</p>
+        <ul>
+          <li>Week 1: Focus on Product A</li>
+          <li>Week 2: Maintenance and Calibration</li>
+          <li>Week 3: Focus on Product B</li>
+          <li>Week 4: Inventory Audit</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="shipping-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Shipping Details</h2>
+        <p>Recent Shipments:</p>
+        <ul>
+          <li>2024-06-25: 200 units to Client X</li>
+          <li>2024-06-20: 150 units to Client Y</li>
+        </ul>
+        <p>Upcoming Shipments:</p>
+        <ul>
+          <li>2024-07-01: 300 units to Client Z</li>
+          <li>2024-07-05: 100 units to Client A</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="compliance-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Compliance Details</h2>
+        <p>Compliance Audits:</p>
+        <ul>
+          <li>ISO 9001 Audit - Scheduled for 2024-07-15</li>
+          <li>FDA Inspection - Completed on 2024-06-05</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="analytics-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Analytics Details</h2>
+        <p>Performance Metrics:</p>
+        <ul>
+          <li>OEE (Overall Equipment Effectiveness): 85%</li>
+          <li>Yield Rate: 95%</li>
+          <li>Downtime: 10 hours/month</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Chart.js scripts for charts
+    const productionCtx = document.getElementById('productionChart').getContext('2d');
+    const productionChart = new Chart(productionCtx, {
+      type: 'bar',
+      data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+        datasets: [{
+          label: 'Units Produced',
+          data: [100, 150, 200, 250, 300, 350],
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    const qualityCtx = document.getElementById('qualityChart').getContext('2d');
+    const qualityChart = new Chart(qualityCtx, {
+      type: 'line',
+      data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+        datasets: [{
+          label: 'Defects',
+          data: [5, 10, 15, 10, 5, 0],
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+    const inventoryChart = new Chart(inventoryCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Raw Materials', 'Work-in-Progress', 'Finished Goods'],
+        datasets: [{
+          label: 'Inventory Levels',
+          data: [300, 200, 100],
+          backgroundColor: [
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+      }
+    });
+
+    // Modal scripts
+    const modalSections = document.querySelectorAll('.mes-section');
+    const modals = document.querySelectorAll('.modal');
+    const closeModalButtons = document.querySelectorAll('.close');
+
+    modalSections.forEach(section => {
+      section.addEventListener('click', () => {
+        const modalId = section.dataset.modal + '-modal';
+        document.getElementById(modalId).style.display = 'block';
+      });
+    });
+
+    closeModalButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        modals.forEach(modal => {
+          modal.style.display = 'none';
+        });
+      });
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

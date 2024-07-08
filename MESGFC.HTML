@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Global Food Concepts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Reset and general styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.6;
+      background-color: #f2f2f2; /* Light gray background */
+      color: #333; /* Dark text color */
+    }
+
+    /* Header styles */
+    .header {
+      background-color: #3498db; /* Blue header background */
+      color: #fff; /* White text color */
+      padding: 10px 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    /* MES sections */
+    .mes-container {
+      max-width: 1200px;
+      margin: 20px auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .mes-section {
+      width: calc(20% - 20px);
+      margin: 10px;
+      background-color: #fff; /* White background */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .mes-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .mes-icon {
+      font-size: 3rem;
+      color: #3498db; /* Blue icon color */
+      padding: 20px;
+      background-color: #f0f0f0; /* Light gray icon background */
+      border-bottom: 2px solid #3498db; /* Blue border bottom */
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .mes-label {
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 10px;
+    }
+
+    /* Container styles */
+    .container {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    }
+
+    .container-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 80%;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .close-container {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 2rem;
+      color: #555; /* Dark gray close icon color */
+      cursor: pointer;
+    }
+
+    .close-container:hover {
+      color: #333; /* Darker gray close icon color on hover */
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc; /* Light gray border */
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    .content-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .content-list li {
+      background-color: #f9f9f9; /* Off-white background */
+      border-radius: 8px;
+      margin-bottom: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    .content-list li:hover {
+      background-color: #f0f0f0; /* Light gray background on hover */
+    }
+
+    .content-list h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #3498db; /* Blue heading color */
+    }
+
+    .content-list p {
+      margin-bottom: 5px;
+    }
+
+    .file-upload {
+      margin-top: 20px;
+    }
+
+    .file-upload label {
+      margin-right: 10px;
+    }
+
+    .file-upload input[type="file"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* Andon light styles */
+    .andon-light {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .andon-light.green {
+      background-color: #2ecc71; /* Green light */
+    }
+
+    .andon-light.yellow {
+      background-color: #f39c12; /* Yellow light */
+    }
+
+    .andon-light.red {
+      background-color: #e74c3c; /* Red light */
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Global Food Concepts Inc.</h1>
+  </header>
+
+  <main class="mes-container">
+    <div class="mes-section" data-container="maintenance">
+      <i class="mes-icon fas fa-wrench"></i>
+      <div class="mes-label">Maintenance</div>
+    </div>
+    <div class="mes-section" data-container="production">
+      <i class="mes-icon fas fa-industry"></i>
+      <div class="mes-label">Production</div>
+    </div>
+    <div class="mes-section" data-container="inventory">
+      <i class="mes-icon fas fa-warehouse"></i>
+      <div class="mes-label">Inventory</div>
+    </div>
+    <div class="mes-section" data-container="planning">
+      <i class="mes-icon fas fa-calendar-alt"></i>
+      <div class="mes-label">Planning</div>
+    </div>
+    <div class="mes-section" data-container="shipping">
+      <i class="mes-icon fas fa-truck"></i>
+      <div class="mes-label">Shipping</div>
+    </div>
+    <div class="mes-section" data-container="quality">
+      <i class="mes-icon fas fa-check-circle"></i>
+      <div class="mes-label">Quality Control</div>
+    </div>
+    <div class="mes-section" data-container="compliance">
+      <i class="mes-icon fas fa-book"></i>
+      <div class="mes-label">Compliance</div>
+    </div>
+    <div class="mes-section" data-container="analytics">
+      <i class="mes-icon fas fa-chart-line"></i>
+      <div class="mes-label">Analytics</div>
+    </div>
+    <div class="mes-section" data-container="maintenance">
+      <i class="mes-icon fas fa-tools"></i>
+      <div class="mes-label">Tools</div>
+    </div>
+    <div class="mes-section" data-container="safety">
+      <i class="mes-icon fas fa-shield-alt"></i>
+      <div class="mes-label">Safety</div>
+    </div>
+    <div class="mes-section" data-container="health">
+      <i class="mes-icon fas fa-medkit"></i>
+      <div class="mes-label">Health</div>
+    </div>
+    <div class="mes-section" data-container="hr">
+      <i class="mes-icon fas fa-users"></i>
+      <div class="mes-label">HR</div>
+    </div>
+  </main>
+  
+  <!-- Containers -->
+  <div id="maintenance-container" class="container">
+    <div class="container-content">
+      <span class="close-container">&times;</span>
+      <h2>Maintenance</h2>
+      <input type="text" class="search-bar" placeholder="Search...">
+      <div class="andon-bar">
+        <div class="andon-light green"></div>
+        <div class="andon-light yellow"></div>
+        <div class="andon-light red"></div>
+      </div>
+      <ul class="content-list">
+        <li>
+          <h3>Tool List</h3>
+          <p>List of tools with their status and calibration details</p>
+          <ul>
+            <li>
+              <h4>Tool 1</h4>
+              <p><strong>Usage:</strong> Calibration</p>
+              <p><strong>Due Date:</strong> 2024-09-30</p>
+              <p><strong>Last Calibrated:</strong> 2024-03-15</p>
+            </li>
+            <li>
+              <h4>Tool 2</h4>
+              <p><strong>Usage:</strong> Inspection</p>
+              <p><strong>Due Date:</strong> 2024-08-20</p>
+              <p><strong>Last Calibrated:</strong> 2024-02-10</p>
+            </li>
+            <!-- Add more tools as needed -->
+          </ul>
+        </li>
+        <!-- Add more maintenance items as needed -->
+      </ul>
+    </div>
+  </div>
+
+  <div id="production-container" class="container">
+    <div class="container-content">
+      <span class="close-container">&times;</span>
+      <h2>Production</h2>
+      <input type="text" class="search-bar" placeholder="Search...">
+      <div class="andon-bar">
+        <div class="andon-light green"></div>
+        <div class="andon-light yellow"></div>
+        <div class="andon-light red"></div>
+      </div>
+      <ul class="content-list">
+        <li>
+          <h3>Production Schedule</h3>
+          <p>Details of the production schedule for various lines</p>
+          <ul>
+            <li>
+              <h4>Line 1</h4>
+              <p><strong>Product:</strong> Product A</p>
+              <p><strong>Quantity:</strong> 1000 units</p>
+              <p><strong>Start Date:</strong> 2024-07-01</p>
+              <p><strong>End Date:</strong> 2024-07-05</p>
+            </li>
+            <li>
+              <h4>Line 2</h4>
+              <p><strong>Product:</strong> Product B</p>
+              <p><strong>Quantity:</strong> 1500 units</p>
+              <p><strong>Start Date:</strong> 2024-07-02</p>
+              <p><strong>End Date:</strong> 2024-07-07</p>
+            </li>
+            <!-- Add more production lines as needed -->
+          </ul>
+        </li>
+        <!-- Add more production items as needed -->
+      </ul>
+    </div>
+  </div>
+
+  <div id="inventory-container" class="container">
+    <div class="container-content">
+      <span class="close-container">&times;</span>
+      <h2>Inventory</h2>
+      <input type="text" class="search-bar" placeholder="Search...">
+      <div class="andon-bar">
+        <div class="andon-light green"></div>
+        <div class="andon-light yellow"></div>
+        <div class="andon-light red"></div>
+      </div>
+      <ul class="content-list">
+        <li>
+          <h3>Stock Levels</h3>
+          <p>Details of current stock levels for various items</p>
+          <ul>
+            <li>
+              <h4>Item 1</h4>
+              <p><strong>Quantity:</strong> 500 units</p>
+              <p><strong>Location:</strong> Warehouse 1</p>
+            </li>
+            <li>
+              <h4>Item 2</h4>
+              <p><strong>Quantity:</strong> 300 units</p>
+              <p><strong>Location:</strong> Warehouse 2</p>
+            </li>
+            <!-- Add more inventory items as needed -->
+          </ul>
+        </li>
+        <!-- Add more inventory items as needed -->
+      </ul>
+    </div>
+  </div>
+
+  <div id="planning-container" class="container">
+    <div class="container-content">
+      <span class="close-container">&times;</span>
+      <h2>Planning</h2>
+      <input type="text" class="search-bar" placeholder="Search...">
+      <div class="andon-bar">
+        <div class="andon-light green"></div>
+        <div class="andon-light yellow"></div>
+        <div class="andon-light red"></div>
+      </div>
+      <ul class="content-list">
+        <li>
+          <h3>Production Plan</h3>
+          <p>Details of the production plan for upcoming months</p>
+          <ul>
+            <li>
+              <h4>Month 1</h4>
+              <p><strong>Product:</strong> Product A</p>
+              <p><strong>Quantity:</strong> 2000 units</p>
+            </li>
+            <li>
+              <h4>Month 2</h4>
+              <p><strong>Product:</strong> Product B</p>
+              <p><strong>Quantity:</strong> 2500 units</p>
+            </li>
+            <!-- Add more planning items as needed -->
+          </ul>
+        </li>
+        <!-- Add more planning items as needed -->
+      </ul>
+    </div>
+  </div>
+
+  <div id="shipping-container" class="container">
+    <div class="container-content">
+      <span class="close-container">&times;</span>
+      <h2>Shipping</h2>
+      <input type="text" class="search-bar" placeholder="Search...">
+      <div class="andon-bar">
+        <div class="andon-light green"></div>
+        <div class="andon-light yellow"></div>
+        <div class="andon-light red"></div>
+      </div>
+      <ul class="content-list">
+        <li>
+          <h3>Shipment List</h3>
+          <p>Details of upcoming and past shipments</p>
+          <ul>
+            <li>
+              <h4>Shipment 1</h4>
+              <p><strong>Date:</strong> 2024-07-01</p>
+              <p><strong>Destination:</strong> Customer A</p>
+            </li>
+            <li>
+              <h4>Shipment 2</h4>
+              <p><strong>Date:</strong> 2024-07-03</p>
+              <p><strong>Destination:</strong> Customer B</p>
+            </li>
+            <!-- Add more shipments as needed -->
+          </ul>
+        </li>
+        <!-- Add more shipping items as needed -->
+      </ul>
+    </div>
+  </div>
+
+  <div id="quality-container" class="container">
+    <div class="container-content">
+      <span class="close-container">&times;</span>
+      <h2>Quality Control</h2>
+      <input type="text" class="search-bar" placeholder="Search...">
+      <div class="andon-bar">
+        <div class="andon-light green"></div>
+        <div class="andon-light yellow"></div>
+        <div class="andon-light red"></div>
+      </div>
+      <ul class="content-list">
+        <li>
+          <h3>Quality Inspections</h3>
+          <p>Details of recent quality inspections</p>
+          <ul>
+            <li>
+              <h4>Inspection 1</h4>
+              <p><strong>Date:</strong> 2024-06-25</p>
+              <p><strong>Product:</strong> Product A</p>
+              <p><strong>Result:</strong> Passed</p>
+            </li>
+            <li>
+              <h4>Inspection 2</h4>
+              <p><strong>Date:</strong> 2024-06-28</p>
+              <p><strong>Product:</strong> Product B</p>
+              <p><strong>Result:</strong> Failed</p>
+            </li>
+            <!-- Add more quality inspections as needed -->
+          </ul>
+        </li>
+        <!-- Add more quality control items as needed -->
+      </ul>
+    </div>
+  </div>
+
+  <div id="compliance-container" class="container">
+    <div class="container-content">
+      <span class="close-container">&times;</span>
+      <h2>Compliance</h2>
+      <input type="text" class="search-bar" placeholder="Search...">
+      <div class="andon-bar">
+        <div class="andon-light green"></div>
+        <div class="andon-light yellow"></div>
+        <div class="andon-light red"></div>
+      </div>
+      <ul class="content-list">
+        <li>
+          <h3>Compliance Reports</h3>
+          <p>Details of recent compliance audits and reports</p>
+          <ul>
+            <li>
+              <h4>Audit 1</h4>
+              <p><strong>Date:</strong> 2024-06-15</p>
+              <p><strong>Result:</strong> Compliant</p>
+            </li>
+            <li>
+              <h4>Audit 2</h4>
+              <p><strong>Date:</strong> 2024-06-20</p>
+              <p><strong>Result:</strong> Non-Compliant</p>
+            </li>
+            <!-- Add more compliance audits as needed -->
+          </ul>
+        </li>
+        <!-- Add more compliance items as needed -->
+      </ul>
+    </div>
+  </div>
+
+  <div id="analytics-container" class="container">
+    <div class="container-content">
+      <span class="close-container">&times;</span>
+      <h2>Analytics</h2>
+      <input type="text" class="search-bar" placeholder="Search...">
+      <div class="andon-bar">
+        <div class="andon-light green"></div>
+        <div class="andon-light yellow"></div>
+        <div class="andon-light red"></div>
+      </div>
+      <ul class
+      class="content-list">
+        <li>
+          <h3>Performance Metrics</h3>
+          <p>Key performance indicators and metrics</p>
+          <ul>
+            <li>
+              <h4>Metric 1</h4>
+              <p><strong>Value:</strong> 85%</p>
+              <p><strong>Trend:</strong> Upward</p>
+            </li>
+            <li>
+              <h4>Metric 2</h4>
+              <p><strong>Value:</strong> 92%</p>
+              <p><strong>Trend:</strong> Stable</p>
+            </li>
+            <!-- Add more analytics metrics as needed -->
+          </ul>
+        </li>
+        <!-- Add more analytics items as needed -->
+      </ul>
+    </div>
+  </div>
+
+  <!-- JavaScript to handle container toggling -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get all MES section containers
+      const mesSections = document.querySelectorAll('.mes-section');
+
+      // Get all container elements
+      const containers = document.querySelectorAll('.container');
+
+      // Close containers when the close button is clicked
+      const closeButtons = document.querySelectorAll('.close-container');
+      closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const container = button.parentElement;
+          container.style.display = 'none';
+        });
+      });
+
+      // Toggle containers when MES sections are clicked
+      mesSections.forEach(section => {
+        section.addEventListener('click', function() {
+          // Get the data-container attribute value
+          const containerId = section.getAttribute('data-container');
+          // Hide all containers
+          containers.forEach(container => {
+            container.style.display = 'none';
+          });
+          // Show the corresponding container
+          document.getElementById(`${containerId}-container`).style.display = 'block';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

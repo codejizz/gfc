@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.M.A.R.T. MES Central Gear System</title>
+    <style>
+        :root {
+            --gear-color-1: #E0E0E0;
+            --gear-color-2: #4A90E2;
+            --gear-color-3: #2C3E50;
+            --gear-color-4: #34495E;
+            --background: #1A1A1A;
+        }
+ .gear {
+        /* ... (keep existing properties) */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .gear:hover {
+        box-shadow: 0 0 20px var(--gear-color-2);
+        z-index: 100;
+    }
+
+    /* Smoother color transitions */
+    :root {
+        /* ... (keep existing variables) */
+        transition: --gear-color-2 0.5s ease;
+    }
+        body {
+            background: var(--background);
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .gear-system {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .gear {
+            position: absolute;
+            border-radius: 50%;
+            background-color: currentColor;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .gear::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20%;
+            height: 20%;
+            background-color: var(--background);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .gear::after {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            right: -10%;
+            bottom: -10%;
+            background: repeating-conic-gradient(
+                from 0deg,
+                transparent 0deg 15deg,
+                currentColor 15deg 30deg
+            );
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+   
+}.central-gear::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+        from 0deg,
+        transparent 0deg 15deg,
+        var(--gear-color-2) 15deg 30deg
+    );
+    z-index: -1;
+}.central-gear::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    background-color: var(--background);
+    border-radius: 50%;
+    z-index: -1;
+}
+    .central-gear {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.central-gear-outer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+        from 0deg,
+        transparent 0deg 15deg,
+        var(--gear-color-2) 15deg 30deg
+    );
+    z-index: -1;
+}
+
+.title-container {
+    background: var(--background);
+    border-radius: 50%;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+        .title {
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--gear-color-2);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .central-gear {
+                width: 200px;
+                height: 200px;
+            }
+            .title { font-size: 1.5rem; }
+            .subtitle { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gear-system" id="gearSystem">
+        <div class="central-gear">
+            <div class="title-container">
+                <h1 class="title">Geared for Success</h1>
+                <h2 class="subtitle">S.M.A.R.T. MES</h2>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const gearSystem = document.getElementById('gearSystem');
+    const gearColors = ['var(--gear-color-1)', 'var(--gear-color-2)', 'var(--gear-color-3)', 'var(--gear-color-4)'];
+    const minGearSize = 20;
+    const maxGearSize = 120;
+    const padding = 5; // Space between gears
+
+    function createGear(size, color, x, y) {
+        const gear = document.createElement('div');
+        gear.classList.add('gear');
+        gear.style.width = `${size}px`;
+        gear.style.height = `${size}px`;
+        gear.style.color = color;
+        gear.style.left = `${x}px`;
+        gear.style.top = `${y}px`;
+        return gear;
+    }
+
+    function populateGears() {
+        gearSystem.innerHTML = `
+            <div class="central-gear">
+                <div class="central-gear-outer"></div>
+                <div class="title-container">
+                    <h1 class="title">Geared for Success</h1>
+                    <h2 class="subtitle">S.M.A.R.T. MES</h2>
+                </div>
+            </div>
+        `;
+        
+        const centralGear = document.querySelector('.central-gear');
+        const centralRect = centralGear.getBoundingClientRect();
+        const centralX = centralRect.left + centralRect.width / 2;
+        const centralY = centralRect.top + centralRect.height / 2;
+        const centralRadius = centralRect.width / 2;
+
+        function isOverlapping(x, y, size) {
+            if (Math.hypot(x - centralX, y - centralY) < centralRadius + size / 2 + padding) {
+                return true;
+            }
+            const gears = document.querySelectorAll('.gear');
+            for (let gear of gears) {
+                const rect = gear.getBoundingClientRect();
+                const gx = rect.left + rect.width / 2;
+                const gy = rect.top + rect.height / 2;
+                const gsize = rect.width;
+                if (Math.hypot(x - gx, y - gy) < (size + gsize) / 2 + padding) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function placeGear() {
+            const size = Math.floor(Math.random() * (maxGearSize - minGearSize + 1)) + minGearSize;
+            const color = gearColors[Math.floor(Math.random() * gearColors.length)];
+            let x, y;
+            let attempts = 0;
+            do {
+                x = Math.random() * (window.innerWidth - size);
+                y = Math.random() * (window.innerHeight - size);
+                attempts++;
+                if (attempts > 1000) return false; // Give up if we can't find a spot
+            } while (isOverlapping(x + size / 2, y + size / 2, size));
+
+            const gear = createGear(size, color, x, y);
+            gearSystem.appendChild(gear);
+            return true;
+        }
+
+        let placed = 0;
+        while (placeGear()) {
+            placed++;
+        }
+        console.log(`Placed ${placed} gears`);
+    }
+
+    function animateGears() {
+        let rotation = 0;
+
+        function animate() {
+            rotation += 0.5;
+            
+            const centralGearOuter = document.querySelector('.central-gear-outer');
+            centralGearOuter.style.transform = `rotate(${rotation}deg)`;
+
+            const gears = document.querySelectorAll('.gear');
+            gears.forEach((gear, index) => {
+                const size = parseInt(gear.style.width);
+                const speedFactor = 1 + (maxGearSize - size) / 100; // Smaller gears rotate faster
+                const reverseRotation = index % 2 === 0 ? -1 : 1;
+                const gearRotation = rotation * reverseRotation * speedFactor;
+                gear.style.transform = `rotate(${gearRotation}deg)`;
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    }
+
+    // Dynamic Color Changes
+    function changeColors() {
+        const root = document.documentElement;
+        const hue = (Date.now() / 100) % 360;
+        root.style.setProperty('--gear-color-2', `hsl(${hue}, 70%, 60%)`);
+    }
+
+    // Initialize
+    populateGears();
+    animateGears();
+    setInterval(changeColors, 100);
+
+    // Resize handler
+    window.addEventListener('resize', populateGears);
+
+    // Add interactivity
+    gearSystem.addEventListener('mousemove', (e) => {
+        const gears = document.querySelectorAll('.gear');
+        gears.forEach((gear) => {
+            const rect = gear.getBoundingClientRect();
+            const gearCenterX = rect.left + rect.width / 2;
+            const gearCenterY = rect.top + rect.height / 2;
+            const distanceX = e.clientX - gearCenterX;
+            const distanceY = e.clientY - gearCenterY;
+            const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+            const maxDistance = 100;
+            if (distance < maxDistance) {
+                const scale = 1 + (maxDistance - distance) / maxDistance * 0.2;
+                gear.style.transform += ` scale(${scale})`;
+            }
+        });
+    });
+</script>
+  </body>
+</html>

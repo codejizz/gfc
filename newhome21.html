@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.M.A.R.T. MES Central Gear System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+:root {
+    --primary-color: #1a3a8f; /* Deep Blue */
+    --secondary-color: #4a90e2; /* Light Blue */
+    --text-color: #333333; /* Dark Gray */
+    --background-color: #f5f5f5; /* Light Gray */
+    --white: #ffffff; /* White */
+    --light-gray: #e0e0e0; /* Light Gray */
+    --dark-gray: #555555; /* Medium Gray */
+    --success-color: #28a745; /* Green */
+    --warning-color: #ffc107; /* Yellow */
+    --danger-color: #dc3545; /* Red */
+}
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Gear System */
+.gear-system {
+    position: relative;
+    width: 800px;
+    height: 800px;
+    overflow: hidden;
+}
+
+.central-gear,
+.global-dashboard-header,
+.container {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.circle,
+.global-ticker,
+.action-button,
+.carousel-card {
+    background-color: var(--secondary-color);
+    color: var(--white);
+}
+
+.global-dashboard-section {
+    background-color: var(--white);
+    color: var(--text-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.global-dashboard-section h3 {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+table {
+    background-color: var(--white);
+    color: var(--text-color);
+}
+
+table th {
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+}
+
+/* Alert Styles */
+.alert.critical {
+    color: var(--white);
+    background-color: var(--danger-color);
+}
+
+.alert.warning {
+    color: var(--dark-gray);
+    background-color: var(--warning-color);
+}
+
+.alert.info {
+    color: var(--white);
+    background-color: var(--success-color);
+}
+
+/* Metric Styles */
+.metric {
+    background-color: var(--white);
+    color: var(--text-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.metric h4 {
+    color: var(--primary-color);
+}
+
+.large-number {
+    color: var(--secondary-color);
+}
+
+/* Dark Mode Adjustments */
+.dark-mode {
+    --background-color: #121212; /* Dark Background */
+    --text-color: #e0e0e0; /* Light Text */
+    --white: #1e1e1e; /* Dark White */
+    --light-gray: #333333; /* Dark Gray */
+    --dark-gray: #b0b0b0; /* Light Gray */
+}
+
+.dark-mode .global-dashboard-section,
+.dark-mode table,
+.dark-mode .metric {
+    background-color: var(--white);
+    color: var(--text-color);
+}
+
+.dark-mode .global-dashboard-section h3,
+.dark-mode .metric h4 {
+    color: var(--secondary-color);
+}
+
+/* Gear System Styles */
+.central-gear {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+}
+
+.central-gear:hover {
+    box-shadow: 0 0 30px rgba(26, 58, 143, 0.9);
+}
+
+.central-gear-outer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 20px dashed var(--secondary-color);
+    border-radius: 50%;
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.title-container {
+    text-align: center;
+    color: var(--white);
+}
+
+.title {
+    font-size: 28px;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 20px;
+    margin: 5px 0 0;
+}
+
+.circle {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    z-index: 10; /* Lower z-index for circles */
+}
+
+.circle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+}
+
+/* Increase z-index for open state of containers */
+.container.open {
+    z-index: 30; /* Adjust z-index higher when container is open */
+}
+
+.icon-gear {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 10px dashed var(--primary-color);
+    border-radius: 50%;
+    animation: rotate-reverse 10s linear infinite;
+}
+
+@keyframes rotate-reverse {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.circle i {
+    font-size: 36px;
+    z-index: 1;
+}
+
+.icon-name {
+    margin-top: 5px;
+    font-size: 14px;
+    z-index: 1;
+}
+
+.background-gear {
+    position: absolute;
+    border-radius: 50%;
+    border: 5px dashed rgba(74, 144, 226, 0.25);
+    animation: rotate 30s linear infinite;
+}
+
+/* CSS for the containers */
+.container {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  display: none;
+  position: relative; /* Ensure containers are positioned */
+    z-index: 20; /* Set a higher z-index */
+
+}
+
+.global-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.global-header-left {
+    display: flex;
+    align-items: center;
+}
+
+.global-user-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    margin-right: 10px;
+}
+
+.global-header-right {
+    display: flex;
+    align-items: center;
+}
+
+.global-search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.global-search-bar input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.global-search-bar button {
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.global-file-upload {
+    margin-left: auto;
+}
+
+.global-file-upload-label {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.global-file-upload-input {
+    display: none;
+}
+
+.global-ticker-content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.global-ticker-content span {
+    width: 50%;
+    padding: 10px;
+}
+
+.quick-actions {
+    margin-top: 20px;
+}
+
+.quick-actions h3 {
+    margin-bottom: 10px;
+}
+
+.action-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.data-carousel {
+    margin-top: 20px;
+}
+
+.carousel-track {
+    display: flex;
+    overflow-x: auto;
+}
+
+.carousel-card {
+    flex: 0 0 auto;
+    width: 300px;
+    padding: 20px;
+    margin-right: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+/* Additional CSS Components for Dashboard Styling */
+
+/* Alerts */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-primary {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+}
+
+.alert-secondary {
+    color: #383d41;
+    background-color: #e2e3e5;
+    border-color: #d6d8db;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* Cards */
+.card {
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.card-header {
+    background-color: rgba(0,0,0,.03);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    padding: .75rem 1.25rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    color: #fff;
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    color: #fff;
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    color: #fff;
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-info {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-info:hover {
+    color: #fff;
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+/* Forms */
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+}
+
+/* Tables */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+.table .table {
+    background-color: #fff;
+}
+
+.table-sm th,
+.table-sm td {
+    padding: .3rem;
+}
+
+/* Typography */
+.display-4 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+/* Utility Classes */
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.p-3 {
+    padding: 1rem !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+    </style>
+</head>
+<body>
+    <div class="gear-system" id="gearSystem">
+        <div class="central-gear">
+            <div class="central-gear-outer"></div>
+            <div class="title-container">
+                <h1 class="title">Geared for Success</h1>
+                <h2 class="subtitle">S.M.A.R.T. MES</h2>
+            </div>
+        </div>
+     
+   <a href="#" class="circle" onclick="toggleContainer(1)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-cogs"></i>
+            <span class="icon-name">Production</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(2)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-wrench"></i>
+            <span class="icon-name">Maintenance</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(3)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-check-circle"></i>
+            <span class="icon-name">Quality</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(4)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-box"></i>
+            <span class="icon-name">Inventory</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(5)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-shipping-fast"></i>
+            <span class="icon-name">Shipping</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(6)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-hard-hat"></i>
+            <span class="icon-name">Safety</span>
+        </a>
+        
+<a href="#" class="circle" onclick="toggleContainer(7)">
+    <div class="icon-gear"></div>
+    <i class="fas fa-chart-line"></i>
+    <span class="icon-name">KPI's</span>
+</a>
+<a href="#" class="circle" onclick="toggleContainer(8)">
+    <div class="icon-gear"></div>
+    <i class="fas fa-industry"></i>
+    <span class="icon-name">Interactive Factory</span>
+</a>
+
+        <!-- Add circles here -->
+   <div id="container1" class="container">
+    <div class="global-dashboard-header">
+        <button id="darkModeToggle">🌓</button>
+        <div class="global-header-left">
+            <h2>Advanced Production Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">JD</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">John Doe</span>
+                    <span class="global-user-title">Production Manager</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search metrics...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-1" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload Data
+                </label>
+                <input id="file-upload-1" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+
+    <section class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Overall OEE: 87%</span>
+            <span>Total Output: 4500 units</span>
+            <span>Quality Score: 98.5%</span>
+            <span>Downtime: 5.2%</span>
+        </div>
+    </section>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="action-button">Create Work Order</button>
+        <button class="action-button">Request Spare Parts</button>
+        <button class="action-button">Update Equipment Log</button>
+        <button class="action-button">Generate Maintenance Report</button>
+    </div>
+
+    <section class="data-carousel">
+        <div class="carousel-track">
+            <div class="carousel-card">
+                <h2>Energy Efficiency</h2>
+                <p>Energy Usage: 1200 kWh</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Safety Metrics</h2>
+                <p>Days Without Incident: 365</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Training</h2>
+                <p>Compliance: 98%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Cost Savings</h2>
+                <p>YTD: $50,000</p>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Container 2: Maintenance -->
+<div id="container2" class="container">
+    <div class="global-dashboard-header">
+        <button id="darkModeToggle">🌓</button>
+        <div class="global-header-left">
+            <h2>Maintenance Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">JD</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">John Doe</span>
+                    <span class="global-user-title">Maintenance Manager</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search metrics...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-2" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload Data
+                </label>
+                <input id="file-upload-2" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+
+    <section class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Work Orders: 25</span>
+            <span>PM Completion Rate: 95%</span>
+            <span>Equipment Downtime: 2%</span>
+            <span>Spare Parts Usage: 150 parts</span>
+        </div>
+    </section>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="action-button">Create Work Order</button>
+        <button class="action-button">Request Additional Resources</button>
+        <button class="action-button">View Maintenance Schedule</button>
+        <button class="action-button">Generate Reports</button>
+    </div>
+
+    <section class="data-carousel">
+        <div class="carousel-track">
+            <div class="carousel-card">
+                <h2>Equipment Health</h2>
+                <p>Overall Equipment Efficiency: 85%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Cost Analysis</h2>
+                <p>Maintenance Costs: $20,000</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Performance Metrics</h2>
+                <p>Mean Time Between Failures: 1500 hours</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Training</h2>
+                <p>Training Completion: 90%</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Container 3: Quality -->
+<div id="container3" class="container">
+    <div class="global-dashboard-header">
+        <button id="darkModeToggle">🌓</button>
+        <div class="global-header-left">
+            <h2>Quality Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">JD</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">John Doe</span>
+                    <span class="global-user-title">Quality Manager</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search metrics...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-3" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload Data
+                </label>
+                <input id="file-upload-3" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+
+    <section class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Defect Rate: 0.5%</span>
+            <span>Customer Complaints: 10</span>
+            <span>Quality Score: 99%</span>
+            <span>Inspection Efficiency: 98%</span>
+        </div>
+    </section>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="action-button">Create Quality Report</button>
+        <button class="action-button">Conduct Root Cause Analysis</button>
+        <button class="action-button">Approve Product Release</button>
+        <button class="action-button">Update Quality Standards</button>
+    </div>
+
+    <section class="data-carousel">
+        <div class="carousel-track">
+            <div class="carousel-card">
+                <h2>Compliance</h2>
+                <p>Regulatory Compliance: 100%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Testing</h2>
+                <p>Testing Completion: 95%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Training</h2>
+                <p>Training Completion: 95%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Cost of Quality</h2>
+                <p>Cost of Quality Analysis: $15,000</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Container 4: Inventory -->
+<div id="container4" class="container">
+    <div class="global-dashboard-header">
+        <button id="darkModeToggle">🌓</button>
+        <div class="global-header-left">
+            <h2>Inventory Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">JD</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">John Doe</span>
+                    <span class="global-user-title">Inventory Manager</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search metrics...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-4" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload Data
+                </label>
+                <input id="file-upload-4" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+
+    <section class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Inventory Turns: 6</span>
+            <span>Stock Accuracy: 98%</span>
+            <span>Reorder Point: 100 units</span>
+            <span>Inventory Cost: $100,000</span>
+        </div>
+    </section>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="action-button">Update Stock Levels</button>
+        <button class="action-button">Create Purchase Order</button>
+        <button class="action-button">Inventory Audit</button>
+        <button class="action-button">Generate Inventory Reports</button>
+    </div>
+
+    <section class="data-carousel">
+        <div class="carousel-track">
+            <div class="carousel-card">
+                <h2>Vendor Performance</h2>
+                <p>Vendor Scorecards: 90%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Obsolete Inventory</h2>
+                <p>Obsolete Items: 5%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Cost Analysis</h2>
+                <p>Inventory Holding Costs: $5,000</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Forecast Accuracy</h2>
+                <p>Forecast Accuracy: 95%</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Container 5: Shipping -->
+<div id="container5" class="container">
+    <div class="global-dashboard-header">
+        <button id="darkModeToggle">🌓</button>
+        <div class="global-header-left">
+            <h2>Shipping Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">JD</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">John Doe</span>
+                    <span class="global-user-title">Shipping Manager</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search metrics...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-5" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload Data
+                </label>
+                <input id="file-upload-5" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+
+    <section class="global-ticker">
+        <div class="global-ticker-content">
+            <span>On-Time Delivery: 98%</span>
+            <span>Shipment Accuracy: 99%</span>
+            <span>Shipping Costs: $20,000</span>
+            <span>Carrier Performance: 95%</span>
+        </div>
+    </section>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="action-button">Track Shipments</button>
+        <button class="action-button">Schedule Pickup</button>
+        <button class="action-button">Generate Shipping Labels</button>
+        <button class="action-button">Customer Notifications</button>
+    </div>
+
+    <section class="data-carousel">
+        <div class="carousel-track">
+            <div class="carousel-card">
+                <h2>Shipping Routes</h2>
+                <p>Route Efficiency: 90%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Carrier Costs</h2>
+                <p>Carrier Comparison: $15,000</p>
+            </div>
+            <div class="carousel-card">
+                <h2>International Shipping</h2>
+                <p>Customs Compliance: 98%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Shipping Metrics</h2>
+                <p>Shipping Performance: 95%</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Container 6: Safety -->
+<div id="container6" class="container">
+    <div class="global-dashboard-header">
+        <button id="darkModeToggle">🌓</button>
+        <div class="global-header-left">
+            <h2>Safety Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">JD</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">John Doe</span>
+                    <span class="global-user-title">Safety Manager</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search metrics...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-6" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload Data
+                </label>
+                <input id="file-upload-6" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+
+    <section class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Days Without Incident: 365</span>
+            <span>Incident Rate: 0%</span>
+            <span>Safety Training Completion: 100%</span>
+            <span>Emergency Preparedness: 95%</span>
+        </div>
+    </section>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="action-button">Report Near Miss</button>
+        <button class="action-button">Review Safety Procedures</button>
+        <button class="action-button">Incident Investigation</button>
+        <button class="action-button">Safety Audit</button>
+    </div>
+
+    <section class="data-carousel">
+        <div class="carousel-track">
+            <div class="carousel-card">
+                <h2>Safety Compliance</h2>
+                <p>Regulatory Compliance: 100%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Training</h2>
+                <p>Training Records: 98%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Hazard Assessment</h2>
+                <p>Hazard Analysis: 95%</p>
+            </div>
+            <div class="carousel-card">
+                <h2>Emergency Response</h2>
+                <p>Response Time: 2 minutes</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            addBackgroundGears();
+            positionCircles();
+            initCharts();
+        });
+
+        function addBackgroundGears() {
+            const gearSystem = document.getElementById('gearSystem');
+            const numGears = 60;
+            for (let i = 0; i < numGears; i++) {
+                const gear = document.createElement('div');
+                gear.classList.add('background-gear');
+                const size = Math.random() * 160 + 20;
+                gear.style.width = `${size}px`;
+                gear.style.height = `${size}px`;
+                const maxX = gearSystem.offsetWidth - size;
+                const maxY = gearSystem.offsetHeight - size;
+                gear.style.left = `${Math.random() * maxX}px`;
+                gear.style.top = `${Math.random() * maxY}px`;
+                const rotationDuration = Math.random() * 20 + 10;
+                const rotationDirection = Math.random() < 0.8 ? 'normal' : 'reverse';
+                gear.style.animation = `rotate ${rotationDuration}s linear infinite ${rotationDirection}`;
+                gearSystem.appendChild(gear);
+            }
+        }
+
+        function positionCircles() {
+            const gearSystem = document.getElementById('gearSystem');
+            const circles = document.querySelectorAll('.circle');
+            const centerX = gearSystem.offsetWidth / 2;
+            const centerY = gearSystem.offsetHeight / 2;
+            const radius = 300;
+            circles.forEach((circle, index) => {
+                const angle = (index / circles.length) * 2 * Math.PI;
+                const x = centerX + radius * Math.cos(angle) - circle.offsetWidth / 2;
+                const y = centerY + radius * Math.sin(angle) - circle.offsetHeight / 2;
+                circle.style.left = `${x}px`;
+                circle.style.top = `${y}px`;
+            });
+        }
+
+       
+function toggleContainer(containerId) {
+    // Hide all containers
+    var containers = document.querySelectorAll('.container');
+    containers.forEach(function(container) {
+        container.style.display = 'none';
+        container.classList.remove('open');
+    });
+
+    // Show the selected container
+    var selectedContainer = document.getElementById('container' + containerId);
+    if (selectedContainer) {
+        selectedContainer.style.display = 'block';
+        selectedContainer.classList.add('open');
+    }
+}
+
+    </script>
+</body>
+</html>

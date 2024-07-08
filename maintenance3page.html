@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufacturing Maintenance Dashboard</title>
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .overview-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin: 0 10px;
+            background-color: #fff;
+        }
+
+        .metric h4 {
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .large-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .search-filter {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        .filter-dropdown {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .content-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .machine-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .machine-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .andon-light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        .machine-details p {
+            margin: 5px 0;
+            color: #777;
+        }
+
+        .machine-actions {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .action-button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+
+        .alerts-panel {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .alert {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .alert .alert-time {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .alert.critical {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .alert.warning {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+
+        .quick-actions {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .data-visualization {
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .file-upload {
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #performance-chart {
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="maintenance-container" class="container">
+        <div class="container-content">
+            <h2>Manufacturing Maintenance Dashboard</h2>
+            
+            <div class="overview-panel">
+                <div class="metric">
+                    <h4>Overall Equipment Effectiveness (OEE)</h4>
+                    <p class="large-number" id="oee">78%</p>
+                </div>
+                <div class="metric">
+                    <h4>Active Machines</h4>
+                    <p class="large-number" id="active-machines">18/20</p>
+                </div>
+                <div class="metric">
+                    <h4>Pending Maintenance</h4>
+                    <p class="large-number" id="pending-maintenance">3</p>
+                </div>
+                <div class="metric">
+                    <h4>Production Target</h4>
+                    <p class="large-number" id="production-target">92%</p>
+                </div>
+            </div>
+
+            <div class="search-filter">
+                <input type="text" class="search-bar" placeholder="Search machines, tools, or maintenance tasks...">
+                <select class="filter-dropdown">
+                    <option value="">All Machines</option>
+                    <option value="operational">Operational</option>
+                    <option value="maintenance">In Maintenance</option>
+                    <option value="offline">Offline</option>
+                </select>
+            </div>
+
+            <ul class="content-list" id="content-list">
+                <!-- Machine items will be dynamically added here -->
+            </ul>
+
+            <div class="alerts-panel">
+                <h3>Real-time Alerts</h3>
+                <ul class="alert-list" id="alert-list">
+                    <!-- Real-time alerts will be dynamically added here -->
+                </ul>
+            </div>
+
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <button class="action-button">Request Emergency Maintenance</button>
+                <button class="action-button">Generate Performance Report</button>
+                <button class="action-button">Update Maintenance Schedule</button>
+            </div>
+
+            <div class="data-visualization">
+                <h3>Performance Trends</h3>
+                <div id="performance-chart"></div>
+            </div>
+
+            <div class="file-upload">
+                <label for="maintenance-file-upload">Upload Maintenance Report</label>
+                <input type="file" id="maintenance-file-upload">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulated data update function
+            function updateData() {
+                // Simulated data
+                const oee = (Math.random() * 100).toFixed(2) + '%';
+                const activeMachines = Math.floor(Math.random() * 20) + '/20';
+                const pendingMaintenance = Math.floor(Math.random() * 10);
+                const productionTarget = (Math.random() * 100).toFixed(2) + '%';
+
+                // Update metrics
+                document.getElementById('oee').textContent = oee;
+                document.getElementById('active-machines').textContent = activeMachines;
+                document.getElementById('pending-maintenance').textContent = pendingMaintenance;
+                document.getElementById('production-target').textContent = productionTarget;
+
+                // Update machine items
+                const machines = [
+                    { id: 'A101', status: 'operational', brand: 'Brand A', model: 'OEM', runtime: Math.floor(Math.random() * 100) 			+ ' hours', nextMaintenance: '2024-07-1' },
+                    { id: 'A102', status: 'offline', brand: 'Brand B', model: 'OEM', runtime: '0 hours', nextMaintenance: 				'Immediate' },
+                    { id: 'A103', status: 'maintenance', brand: 'Brand C', model: 'Kumba', runtime: '0 hours', progress: '60%' },
+   		    { id: 'A104', status: 'operational', brand: 'Brand A', model: 'Kumba', runtime: Math.floor(Math.random() *                 			100) + ' hours', nextMaintenance: '2024-07-15'},
+                    { id: 'A105', status: 'operational', brand: 'Brand B', model: 'OEM', runtime: '0 hours', nextMaintenance: 				'Immediate' },
+                    { id: 'A106', status: 'maintenance', brand: 'Brand A', model: 'Kumba', runtime: '0 hours', progress: '60%' },
+                    { id: 'A107', status: 'operational', brand: 'Brand A', model: 'OEM', runtime: Math.floor(Math.random() * 				100) + ' hours', nextMaintenance: '2024-07-22' },
+                    { id: 'A108', status: 'offline', brand: 'Brand B', model: Kumba', runtime: '5.6 hours', nextMaintenance:                                    			'Immediate' },
+                    { id: 'A109', status: 'maintenance', brand: 'Brand C', model: 'Kumba', runtime: '10 hours', progress: 				'60%' },
+   		    { id: 'A1010', status: 'operational', brand: 'Brand A', model: 'OEM', runtime: Math.floor(Math.random() * 				100) + ' hours', nextMaintenance: '2024-07-16' },
+                    { id: 'A111', status: 'operational', brand: 'Brand A', model: 'Xepper', runtime: '2.3 hours', 					nextMaintenance: 'Immediate' },
+                    { id: 'A112', status: 'maintenance', brand: 'Brand B', model: 'Xepper', runtime: '1.7 hours', progress: 				'60%' }
+                ];
+
+                const contentList = document.getElementById('content-list');
+                contentList.innerHTML = '';
+
+                machines.forEach(machine => {
+                    const machineItem = document.createElement('li');
+                    machineItem.className = 'machine-item';
+                    
+                    const andonClass = machine.status === 'operational' ? 'green' : machine.status === 'offline' ? 'red' : 'yellow';
+
+                    machineItem.innerHTML = `
+                        <div class="machine-header">
+                            <h3>${machine.id}</h3>
+                            <div class="andon-light ${andonClass}" title="${machine.status.charAt(0).toUpperCase() + machine.status.slice(1)}"></div>
+                        </div>
+                        <div class="machine-details">
+                            <p><strong>Brand:</strong> ${machine.brand}</p>
+                            <p><strong>Model:</strong> ${machine.model}</p>
+                            <p><strong>Runtime:</strong> ${machine.runtime}</p>
+                            <p><strong>Next Maintenance:</strong> ${machine.nextMaintenance}</p>
+                        </div>
+                        <div class="machine-actions">
+                            <button class="action-button">Details</button>
+                            <button class="action-button">${machine.status === 'maintenance' ? 'Update' : 'Maintain'}</button>
+                        </div>
+                    `;
+
+                    contentList.appendChild(machineItem);
+                });
+
+                // Update alerts
+                const alerts = [
+                    { time: '10:15 AM', message: 'Machine A102 unexpected shutdown. Maintenance required.', type: 'critical' },
+                    { time: '09:30 AM', message: 'Machine A101 efficiency dropped below 85%. Check required.', type: 'warning' }
+		    { time: '11:25 AM', message: 'Machine A112 unexpected high limit trigger, SPC defined spec. Process Engineering Required.', type: 'critical' },
+                    { time: '2:30 PM', message: 'Machine A106 efficiency dropped below 85%. Check required.', type: 'warning' }
+                ];
+
+                const alertList = document.getElementById('alert-list');
+                alertList.innerHTML = '';
+
+                alerts.forEach(alert => {
+                    const alertItem = document.createElement('li');
+                    alertItem.className = `alert ${alert.type}`;
+
+                    alertItem.innerHTML = `
+                        <span class="alert-time">${alert.time}</span>
+                        <span class="alert-message">${alert.message}</span>
+                    `;
+
+                    alertList.appendChild(alertItem);
+                });
+            }
+
+            // Initial data load
+            updateData();
+
+            // Periodic data updates
+            setInterval(updateData, 3000); // Update every 3 seconds
+
+            // Search filter functionality
+            const searchBar = document.querySelector('.search-bar');
+            const filterDropdown = document.querySelector('.filter-dropdown');
+            const machineItems = document.querySelectorAll('.machine-item');
+
+            searchBar.addEventListener('input', () => {
+                filterMachines();
+            });
+
+            filterDropdown.addEventListener('change', () => {
+                filterMachines();
+            });
+
+            function filterMachines() {
+                const searchText = searchBar.value.toLowerCase();
+                const filterValue = filterDropdown.value;
+
+                machineItems.forEach(item => {
+                    const machineName = item.querySelector('h3').textContent.toLowerCase();
+                    const machineStatus = item.querySelector('.andon-light').title.toLowerCase();
+                    const machineModel = item.querySelector('.machine-details').textContent.toLowerCase();
+
+                    if (
+                        (machineName.includes(searchText) || machineModel.includes(searchText)) &&
+                        (filterValue === "" || machineStatus === filterValue)
+                    ) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

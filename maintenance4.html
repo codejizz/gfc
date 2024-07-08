@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufacturing Maintenance Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00ffff;
+            --secondary-color: #ff00ff;
+            --background-color: #121212;
+            --text-color: #e0e0e0;
+            --highlight-color: #33ff33;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #maintenance-container {
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        .container-content {
+            position: relative;
+        }
+
+        h2, h3, h4 {
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .overview-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .metric {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .large-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .search-filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-bar, .filter-dropdown {
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .content-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .machine-item {
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .machine-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .machine-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .andon-light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .andon-light.green { 
+            background-color: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .andon-light.yellow { 
+            background-color: #ffff00;
+            box-shadow: 0 0 10px #ffff00;
+        }
+
+        .andon-light.red { 
+            background-color: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        .machine-details {
+            margin-top: 10px;
+        }
+
+        .machine-actions {
+            margin-top: 15px;
+        }
+
+        .action-button {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .action-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .maintenance-schedule {
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background-color: rgba(0, 255, 255, 0.1);
+            color: var(--primary-color);
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+
+        .status.upcoming {
+            background-color: rgba(255, 255, 0, 0.2);
+            color: #ffff00;
+        }
+
+        .status.scheduled {
+            background-color: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+                .alerts-panel {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .alert {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .alert .alert-time {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .alert.critical {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .alert.warning {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+
+        .quick-actions {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .data-visualization {
+            margin-top: 30px;
+        }
+
+        #performance-chart {
+            width: 100%;
+            height: 300px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .file-upload {
+            margin-top: 30px;
+        }
+
+        .file-upload label {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .file-upload label:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="maintenance-container" class="container">
+        <div class="container-content">
+            <h2>Manufacturing Maintenance Dashboard</h2>
+            
+            <div class="overview-panel">
+                <div class="metric">
+                    <h4>Overall Equipment Effectiveness (OEE)</h4>
+                    <p class="large-number">78%</p>
+                </div>
+                <div class="metric">
+                    <h4>Active Machines</h4>
+                    <p class="large-number">18/20</p>
+                </div>
+                <div class="metric">
+                    <h4>Pending Maintenance</h4>
+                    <p class="large-number">3</p>
+                </div>
+                <div class="metric">
+                    <h4>Production Target</h4>
+                    <p class="large-number">92%</p>
+                </div>
+            </div>
+
+            <div class="search-filter">
+                <input type="text" class="search-bar" placeholder="Search machines, tools, or maintenance tasks...">
+                <select class="filter-dropdown">
+                    <option value="">All Machines</option>
+                    <option value="operational">Operational</option>
+                    <option value="maintenance">In Maintenance</option>
+                    <option value="offline">Offline</option>
+                </select>
+            </div>
+
+            <ul class="content-list">
+                <li class="machine-item">
+                    <div class="machine-header">
+                        <h3>Machine A101</h3>
+                        <div class="andon-light green" title="Operational"></div>
+                    </div>
+                    <div class="machine-details">
+                        <p><strong>Brand:</strong> Example Brand</p>
+                        <p><strong>Model:</strong> A101</p>
+                        <p><strong>Serial Number:</strong> SN12345</p>
+                        <p><strong>Current Runtime:</strong> 72 hours</p>
+                        <p><strong>Next Scheduled Maintenance:</strong> 2024-07-15</p>
+                    </div>
+                    <div class="machine-actions">
+                        <button class="action-button">View Details</button>
+                        <button class="action-button">Schedule Maintenance</button>
+                    </div>
+                </li>
+
+                <li class="machine-item">
+                    <div class="machine-header">
+                        <h3>Machine A102</h3>
+                        <div class="andon-light red" title="Offline"></div>
+                    </div>
+                    <div class="machine-details">
+                        <p><strong>Brand:</strong> Example Brand</p>
+                        <p><strong>Model:</strong> A102</p>
+                        <p><strong>Serial Number:</strong> SN67890</p>
+                        <p><strong>Current Runtime:</strong> 0 hours</p>
+                        <p><strong>Next Scheduled Maintenance:</strong> Immediate</p>
+                    </div>
+                    <div class="machine-actions">
+                        <button class="action-button">Lot Details</button>
+                        <button class="action-button">Request Maintenance</button>
+                    </div>
+  	            <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                	<button class="action-button">Request Emergency Maintenance</button>
+                	<button class="action-button">Generate Performance Report</button>
+                	<button class="action-button">Update Maintenance Schedule</button>
+                   </div>
+                </li>
+
+                <li class="machine-item">
+                    <div class="machine-header">
+                        <h3>Machine A103</h3>
+                        <div class="andon-light yellow" title="In Maintenance"></div>
+                    </div>
+                    <div class="machine-details">
+                        <p><strong>Brand:</strong> Example Brand</p>
+                        <p><strong>Model:</strong> A103</p>
+                        <p><strong>Serial Number:</strong> SN54321</p>
+                        <p><strong>Current Runtime:</strong> 0 hours</p>
+                        <p><strong>Maintenance Progress:</strong> 60%</p>
+                    </div>
+                    <div class="machine-actions">
+                        <button class="action-button">View Details</button>
+                        <button class="action-button">Update Maintenance Status</button>
+                    </div>
+                </li>
+
+                <li class="maintenance-schedule">
+                    <h3>Upcoming Maintenance</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Machine</th>
+                                <th>Type</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Machine A101</td>
+                                <td>Quarterly PM</td>
+                                <td>2024-07-15</td>
+                                <td><span class="status upcoming">Upcoming</span></td>
+                            </tr>
+                            <tr>
+                                <td>Machine A102</td>
+                                <td>Emergency Repair</td>
+                                <td>Immediate</td>
+                                <td><span class="status scheduled">Scheduled</span></td>
+                            </tr>
+                            <tr>
+                                <td>Machine A103</td>
+                                <td>Annual Overhaul</td>
+                                <td>In Progress</td>
+                                <td><span class="status scheduled">In Progress</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+
+            <div class="alerts-panel">
+                <h3>Real-time Alerts</h3>
+                <ul class="alert-list">
+                    <li class="alert critical">
+                        <span class="alert-time">10:15 AM</span>
+                        <span class="alert-message">Machine A102 unexpected shutdown. Maintenance required.</span>
+                    </li>
+                    <li class="alert warning">
+                        <span class="alert-time">09:30 AM</span>
+                        <span class="alert-message">Machine A101 efficiency dropped below 85%. Check required.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <button class="action-button">Request Emergency Maintenance</button>
+                <button class="action-button">Generate Performance Report</button>
+                <button class="action-button">Update Maintenance Schedule</button>
+            </div>
+
+            <div class="data-visualization">
+                <h3>Performance Trends</h3>
+                <div id="performance-chart"></div>
+            </div>
+
+            <div class="file-upload">
+                <label for="maintenance-file-upload">Upload Maintenance Report</label>
+                <input type="file" id="maintenance-file-upload">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample JavaScript for interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Search functionality
+            const searchBar = document.querySelector('.search-bar');
+            searchBar.addEventListener('input', function() {
+                // Implement search logic here
+                console.log('Searching for:', this.value);
+            });
+
+            // Filter functionality
+            const filterDropdown = document.querySelector('.filter-dropdown');
+            filterDropdown.addEventListener('change', function() {
+                // Implement filter logic here
+                console.log('Filtering by:', this.value);
+            });
+
+            // Action buttons
+            const actionButtons = document.querySelectorAll('.action-button');
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Implement action logic here
+                    console.log('Action:', this.textContent);
+                });
+            });
+
+            // File upload
+            const fileUpload = document.getElementById('maintenance-file-upload');
+            fileUpload.addEventListener('change', function() {
+                // Implement file upload logic here
+                console.log('File selected:',console.log('File selected:', this.files[0].name);
+            });
+
+            // Performance chart (using a mock-up function)
+            function drawPerformanceChart() {
+                const chart = document.getElementById('performance-chart');
+                const ctx = chart.getContext('2d');
+                
+                // This is a simple mock-up. In a real application, you'd use a proper charting library like Chart.js
+                ctx.fillStyle = 'rgba(0, 255, 255, 0.5)';
+                ctx.beginPath();
+                ctx.moveTo(0, 300);
+                ctx.lineTo(50, 200);
+                ctx.lineTo(100, 250);
+                ctx.lineTo(150, 180);
+                ctx.lineTo(200, 220);
+                ctx.lineTo(250, 150);
+                ctx.lineTo(300, 200);
+                ctx.lineTo(300, 300);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.strokeStyle = 'rgba(255, 0, 255, 0.8)';
+                ctx.beginPath();
+                ctx.moveTo(0, 300);
+                ctx.lineTo(50, 200);
+                ctx.lineTo(100, 250);
+                ctx.lineTo(150, 180);
+                ctx.lineTo(200, 220);
+                ctx.lineTo(250, 150);
+                ctx.lineTo(300, 200);
+                ctx.stroke();
+            }
+
+            drawPerformanceChart();
+
+            // Real-time updates simulation
+            function simulateRealTimeUpdates() {
+                const machines = document.querySelectorAll('.machine-item');
+                setInterval(() => {
+                    machines.forEach(machine => {
+                        const runtime = machine.querySelector('p:nth-child(4)');
+                        if (runtime) {
+                            let hours = parseInt(runtime.textContent.split(' ')[2]);
+                            if (Math.random() > 0.8) {  // 20% chance of status change
+                                const light = machine.querySelector('.andon-light');
+                                if (light.classList.contains('green')) {
+                                    light.classList.replace('green', 'yellow');
+                                    light.title = 'In Maintenance';
+                                } else if (light.classList.contains('yellow')) {
+                                    light.classList.replace('yellow', 'green');
+                                    light.title = 'Operational';
+                                    hours += 1;
+                                }
+                            } else if (light.classList.contains('green')) {
+                                hours += 1;
+                            }
+                            runtime.textContent = `Current Runtime: ${hours} hours`;
+                        }
+                    });
+
+                    // Update alerts
+                    const alertList = document.querySelector('.alert-list');
+                    if (Math.random() > 0.9) {  // 10% chance of new alert
+                        const alert = document.createElement('li');
+                        alert.className = Math.random() > 0.5 ? 'alert warning' : 'alert critical';
+                        const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        alert.innerHTML = `
+                            <span class="alert-time">${time}</span>
+                            <span class="alert-message">New alert: ${Math.random().toString(36).substring(7)}</span>
+                        `;
+                        alertList.prepend(alert);
+                        if (alertList.children.length > 5) {
+                            alertList.removeChild(alertList.lastChild);
+                        }
+                    }
+
+                    // Update performance chart
+                    drawPerformanceChart();
+                }, 5000);  // Update every 5 seconds
+            }
+
+            simulateRealTimeUpdates();
+        });
+    </script>
+</body>
+</html>

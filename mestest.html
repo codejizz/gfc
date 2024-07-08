@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MES System</title>
+  <style>
+    /* CSS Styles */
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .gear-system {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .central-gear {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      background-color: #ccc;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .title-container {
+      text-align: center;
+    }
+
+    .title {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 2rem;
+      color: #666;
+    }
+
+    .strengths {
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      margin: 20px auto;
+    }
+
+    .strengths__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .strengths__item {
+      text-align: center;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .strengths__item-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .strengths__item-title {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    .strengths__item-description {
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="gear-system" id="gearSystem">
+    <div class="central-gear">
+      <div class="title-container">
+        <h1 class="title">Geared for Success</h1>
+        <h2 class="subtitle">S.M.A.R.T. MES</h2>
+      </div>
+    </div>
+
+    <section class="strengths">
+      <h2 class="strengths__heading">Strengths</h2>
+      <div class="strengths__grid">
+        <div class="strengths__item">
+          <i class="strengths__item-icon fas fa-cog"></i>
+          <h3 class="strengths__item-title">Production</h3>
+          <p class="strengths__item-description">Optimize production processes and increase efficiency in manufacturing operations.</p>
+        </div>
+        <div class="strengths__item">
+          <i class="strengths__item-icon fas fa-check-circle"></i>
+          <h3 class="strengths__item-title">Quality</h3>
+          <p class="strengths__item-description">Ensure high standards of quality control to deliver exceptional products to customers.</p>
+        </div>
+        <div class="strengths__item">
+          <i class="strengths__item-icon fas fa-tools"></i>
+          <h3 class="strengths__item-title">Maintenance</h3>
+          <p class="strengths__item-description">Keep equipment and facilities in optimal condition to minimize downtime and disruptions.</p>
+        </div>
+        <div class="strengths__item">
+          <i class="strengths__item-icon fas fa-boxes"></i>
+          <h3 class="strengths__item-title">Inventory</h3>
+          <p class="strengths__item-description">Efficiently manage inventory levels and stock to meet demand and reduce waste.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Font Awesome -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+</body>
+</html>

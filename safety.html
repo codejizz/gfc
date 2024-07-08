@@ -1,0 +1,218 @@
+
+  <div class="container" id="safety-container">
+ <div class="dashboard-header">
+        <h2>Safety Dashboard</h2>
+        <div class="user-profile">
+            <div class="user-avatar">JD</div>
+            <span>John Doe - Safety Director</span>
+        </div>
+    </div>
+
+    <div class="overview-panel">
+        <div class="metric">
+            <h4>Total Recordable Incident Rate (TRIR)</h4>
+            <p class="large-number">2.5</p>
+            <p>Last Month: 2.8</p>
+            <p>Target: < 2.0</p>
+        </div>
+        <div class="metric">
+            <h4>Lost Time Injury Frequency Rate (LTIFR)</h4>
+            <p class="large-number">0.8</p>
+            <p>Last Month: 1.2</p>
+            <p>Target: < 0.5</p>
+        </div>
+        <div class="metric">
+            <h4>Near Miss Reporting Rate</h4>
+            <p class="large-number">15.3</p>
+            <p>Per 100 employees</p>
+            <p>Target: > 20</p>
+        </div>
+        <div class="metric">
+            <h4>Fatalities</h4>
+            <p class="large-number">0</p>
+            <p>Last 12 Months: 0</p>
+            <p>Target: 0</p>
+        </div>
+    </div>
+
+    <div class="search-filter">
+        <input type="text" class="search-bar" placeholder="Search safety records...">
+        <select class="filter-dropdown">
+            <option value="">Filter by incident type...</option>
+            <option value="near-miss">Near Miss</option>
+            <option value="injury">Injury</option>
+            <option value="chemical-spill">Chemical Spill</option>
+        </select>
+    </div>
+
+    <div class="machine-grid">
+        <div class="machine-item">
+            <div class="machine-header">
+                <h3>Assembly Line A</h3>
+                <div class="andon-light green"></div>
+            </div>
+            <div class="machine-details">
+                <p>Status: Safe</p>
+                <p>Last Incident: 45 days ago</p>
+                <p>Safety Score: 92%</p>
+            </div>
+            <div class="machine-actions">
+                <button class="action-button">View Details</button>
+                <button class="action-button">Schedule Safety Audit</button>
+            </div>
+        </div>
+        <div class="machine-item">
+            <div class="machine-header">
+                <h3>Chemical Storage Area</h3>
+                <div class="andon-light yellow"></div>
+            </div>
+            <div class="machine-details">
+                <p>Status: Caution</p>
+                <p>Last Incident: 5 days ago</p>
+                <p>Safety Score: 78%</p>
+            </div>
+            <div class="machine-actions">
+                <button class="action-button">View Details</button>
+                <button class="action-button">Schedule Inspection</button>
+            </div>
+        </div>
+        <div class="machine-item">
+            <div class="machine-header">
+                <h3>Loading Dock</h3>
+                <div class="andon-light red"></div>
+            </div>
+            <div class="machine-details">
+                <p>Status: Urgent Action Required</p>
+                <p>Last Incident: Today</p>
+                <p>Safety Score: 65%</p>
+            </div>
+            <div class="machine-actions">
+                <button class="action-button">View Details</button>
+                <button class="action-button">Initiate Safety Protocol</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="maintenance-schedule">
+        <h3>Safety Audit Schedule</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>Audit Type</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Assembly Line A</td>
+                    <td>Ergonomics Assessment</td>
+                    <td>2024-07-05</td>
+                    <td><span class="status scheduled">Scheduled</span></td>
+                </tr>
+                <tr>
+                    <td>Chemical Storage</td>
+                    <td>Hazardous Material Handling</td>
+                    <td>2024-07-10</td>
+                    <td><span class="status upcoming">Upcoming</span></td>
+                </tr>
+                <tr>
+                    <td>Loading Dock</td>
+                    <td>Equipment Safety Check</td>
+                    <td>2024-06-30</td>
+                    <td><span class="status scheduled">Scheduled</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alerts-panel">
+        <h3>Real-Time Safety Alerts</h3>
+        <ul class="alert-list">
+            <li class="alert critical">
+                <span class="alert-time">10:15 AM</span>
+                <span class="alert-message">Chemical spill reported in Storage<span class="alert-message">Chemical spill reported in Storage Area B. Containment team dispatched.</span>
+            </li>
+            <li class="alert warning">
+                <span class="alert-time">09:45 AM</span>
+                <span class="alert-message">Near miss reported on Assembly Line A. Investigation initiated.</span>
+            </li>
+            <li class="alert info">
+                <span class="alert-time">08:30 AM</span>
+                <span class="alert-message">Monthly safety training completion rate: 95%</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="action-button">Report Incident</button>
+        <button class="action-button">Schedule Safety Training</button>
+        <button class="action-button">Review Emergency Procedures</button>
+        <button class="action-button">Update Risk Assessment</button>
+    </div>
+
+    <div class="data-visualization">
+        <h3>Safety Performance Trends</h3>
+        <canvas id="safety-performance-chart"></canvas>
+    </div>
+
+    <div class="file-upload">
+        <label for="file-upload">Upload Incident Report</label>
+        <input type="file" id="file-upload">
+    </div>
+
+    <div class="predictive-maintenance">
+        <h3>Safety Leading Indicators</h3>
+        <ul class="prediction-list">
+            <li class="prediction-item">
+                <span>Safety Training Completion Rate</span>
+                <span>95% (Target: 100%)</span>
+            </li>
+            <li class="prediction-item">
+                <span>Safety Compliance Audit Score</span>
+                <span>88% (Target: 95%)</span>
+            </li>
+            <li class="prediction-item">
+                <span>Employee Safety Perception Score</span>
+                <span>4.2/5 (Target: 4.5/5)</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="cost-analysis">
+        <h3>Safety Impact Analysis</h3>
+        <ul class="cost-list">
+            <li class="cost-item">
+                <span>Lost Time Due to Injuries (Last Month)</span>
+                <span class="savings-amount">120 hours</span>
+            </li>
+            <li class="cost-item">
+                <span>Safety Improvement Investments (YTD)</span>
+                <span class="savings-amount">$250,000</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="inventory-status">
+        <h3>Safety Equipment Status</h3>
+        <ul class="inventory-list">
+            <li class="inventory-item">
+                <span>Personal Protective Equipment (PPE)</span>
+                <span>98% Compliance</span>
+            </li>
+            <li class="inventory-item">
+                <span>First Aid Kits</span>
+                <span>100% Stocked</span>
+            </li>
+            <li class="inventory-item">
+                <span>Fire Extinguishers</span>
+                <span>Last Inspected: 2024-06-15</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+

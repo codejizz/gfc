@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Production Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <h1>Welcome, John Doe</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#production">Production</a></li>
+                    <li><a href="#quality">Quality</a></li>
+                    <li><a href="#maintenance">Maintenance</a></li>
+                </ul>
+            </nav>
+            <button id="darkModeToggle" aria-label="Toggle dark mode">🌙</button>
+        </header>
+
+        <section id="overview" class="data-carousel">
+            <h2 class="sr-only">Overview</h2>
+            <div class="carousel-container">
+                <button class="carousel-button prev" aria-label="Previous slide">❮</button>
+                <div class="carousel-track">
+                    <div class="carousel-card">
+                        <h3>Today's Production</h3>
+                        <p class="large-number">1,234</p>
+                        <p>Units</p>
+                    </div>
+                    <div class="carousel-card">
+                        <h3>Efficiency</h3>
+                        <p class="large-number">98.5%</p>
+                        <p>Overall</p>
+                    </div>
+                    <div class="carousel-card">
+                        <h3>Active Orders</h3>
+                        <p class="large-number">42</p>
+                        <p>In Progress</p>
+                    </div>
+                    <div class="carousel-card">
+                        <h3>Quality Control</h3>
+                        <p class="large-number">99.9%</p>
+                        <p>Pass Rate</p>
+                    </div>
+                    <div class="carousel-card">
+                        <h3>Energy Consumption</h3>
+                        <p class="large-number">1,250 kWh</p>
+                        <p>Today</p>
+                    </div>
+                </div>
+                <button class="carousel-button next" aria-label="Next slide">❯</button>
+            </div>
+        </section>
+
+        <section id="production" class="production-section">
+            <h2>Production Overview</h2>
+            <div class="production-metrics">
+                <div class="metric fade-in">
+                    <h3>Total Production</h3>
+                    <p class="large-number">10,000</p>
+                    <p>Units this month</p>
+                </div>
+                <div class="metric fade-in">
+                    <h3>Efficiency</h3>
+                    <p class="large-number">95%</                    <p>Average this week</p>
+                </div>
+                <div class="metric fade-in">
+                    <h3>Downtime</h3>
+                    <p class="large-number">2.5</p>
+                    <p>Hours this week</p>
+                </div>
+            </div>
+
+            <div class="production-grid">
+                <div class="production-item slide-in">
+                    <div class="production-header">
+                        <h3>Production Line A</h3>
+                        <span class="status-indicator green" aria-label="Status: Operational"></span>
+                    </div>
+                    <p>Current Output: 100 units/hour</p>
+                    <p>Efficiency: 98%</p>
+                    <p>Operators: 5</p>
+                    <p>Next Maintenance: 3 days</p>
+                    <div class="production-chart">
+                        <canvas id="chartLineA"></canvas>
+                    </div>
+                </div>
+                <div class="production-item slide-in">
+                    <div class="production-header">
+                        <h3>Production Line B</h3>
+                        <span class="status-indicator yellow" aria-label="Status: Warning"></span>
+                    </div>
+                    <p>Current Output: 85 units/hour</p>
+                    <p>Efficiency: 92%</p>
+                    <p>Operators: 4</p>
+                    <p>Next Maintenance: 1 day</p>
+                    <div class="production-chart">
+                        <canvas id="chartLineB"></canvas>
+                    </div>
+                </div>
+                <div class="production-item slide-in">
+                    <div class="production-header">
+                        <h3>Production Line C</h3>
+                        <span class="status-indicator red" aria-label="Status: Down"></span>
+                    </div>
+                    <p>Current Output: 0 units/hour</p>
+                    <p>Status: Maintenance</p>
+                    <p>Estimated Restart: 2 hours</p>
+                    <p>Maintenance Crew: Team B</p>
+                    <div class="production-chart">
+                        <canvas id="chartLineC"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quality" class="quality-section">
+            <h2>Quality Control</h2>
+            <div class="quality-metrics">
+                <div class="metric fade-in">
+                    <h3>Defect Rate</h3>
+                    <p class="large-number">0.1%</p>
+                    <p>This week</p>
+                </div>
+                <div class="metric fade-in">
+                    <h3>Quality Audits</h3>
+                    <p class="large-number">15</p>
+                    <p>Completed this month</p>
+                </div>
+            </div>
+            <div class="quality-chart">
+                <canvas id="qualityChart"></canvas>
+            </div>
+            <div class="quality-chart">
+                <canvas id="additionalQualityChart"></canvas>
+            </div>
+        </section>
+
+        <section id="maintenance" class="maintenance-section">
+            <h2>Maintenance Schedule</h2>
+            <table class="maintenance-table">
+                <thead>
+                    <tr>
+                        <th>Production Line</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Line A</td>
+                        <td>Routine</td>
+                        <td>2024-07-05</td>
+                        <td>4 hours</td>
+                        <td>Scheduled</td>
+                    </tr>
+                    <tr>
+                        <td>Line B</td>
+                        <td>Deep Clean</td>
+                        <td>2024-07-03</td>
+                        <td>8 hours</td>
+                        <td>In Progress</td>
+                    </tr>
+                    <tr>
+                        <td>Line C</td>
+                        <td>Emergency</td>
+                        <td>In Progress</td>
+                        <td>2 hours</td>
+                        <td>Critical</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="alerts-panel">
+            <h2>Recent Alerts</h2>
+            <ul class="alert-list">
+                <li class="alert critical">Critical: Production Line C down for emergency maintenance</li>
+                <li class="alert warning">Warning: Production Line B efficiency below target</li>
+                <li class="alert info">Info: Scheduled maintenance for Production Line A tomorrow</li>
+            </ul>
+        </section>
+
+        <div class="quick-actions">
+            <button class="action-button" data-content="Generate Report">Generate Report</button>
+            <button class="action-button" data-content="Schedule Maintenance">Schedule Maintenance</button>
+            <button class="action-button" data-content="Machine Downtime">Machine Downtime</button>
+        </div>
+
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span class="close-popup">&times;</span>
+                <p id="popup-text"></p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

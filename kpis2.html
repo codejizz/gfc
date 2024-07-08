@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Factory Dashboard</title>
+    <style>
+        :root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --background-color: #f0f4f8;
+  --text-color: #2c3e50;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --accent-color: #e74c3c;
+  --success-color: #27ae60;
+  --warning-color: #f39c12;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.dashboard-nav {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  padding: 1rem;
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.dashboard-nav ul {
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard-nav h3 {
+  color: white;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.dashboard-nav h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+.dashboard-nav h3:hover {
+  transform: translateY(-3px);
+}
+
+.dashboard-nav h3:hover::after {
+  width: 100%;
+}
+
+.carousel-container {
+  overflow: hidden;
+  margin: 2rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.carousel {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.widget {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  margin: 0 1rem;
+  padding: 1.5rem;
+  min-width: 300px;
+  transition: all 0.3s ease;
+}
+
+.widget:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 40px var(--shadow-color);
+}
+
+.widget h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.metric-label {
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.metric-value {
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.factory-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.highlight {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.highlight::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 80%);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+}
+
+.highlight:hover::before {
+  top: -75%;
+  left: -75%;
+}
+
+.highlight:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 40px var(--shadow-color);
+}
+
+.highlight-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.financial-chart {
+  height: 250px;
+  width: 100%;
+  background-color: var(--background-color);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px var(--shadow-color);
+}
+
+.supply-chain-map {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: linear-gradient(45deg, #f3f4f6, #e5e7eb);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+.node {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  padding: 1rem;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.node:hover {
+  transform: scale(1.1);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
+  }
+  
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+  }
+  
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+  }
+}
+
+.highlight:hover .highlight-value {
+  animation: pulse 1.5s infinite;
+}
+   .mfg-dashboard-container {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .mfg-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .mfg-kpi {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .mfg-kpi:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.1);
+        }
+        .mfg-kpi-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .mfg-gauge {
+            width: 100%;
+            height: auto;
+            max-width: 200px;
+            margin: 0 auto;
+            display: block;
+        }
+        .mfg-gauge-bg {
+            stroke: #e0e0e0;
+            stroke-width: 12;
+        }
+        .mfg-gauge-fill {
+            stroke-width: 12;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        .mfg-gauge-indicator {
+            stroke: #34495e;
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+        .mfg-gauge-value {
+            font-size: 24px;
+            font-weight: bold;
+            fill: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="dashboard-nav">
+  <ul>
+    <li><h3>Production</h3></li>
+    <li><h3>Quality</h3></li>
+    <li><h3>Maintenance</h3></li>
+    <li><h3>Inventory</h3></li>
+    <li><h3>Shipping</h3></li>
+    <li><h3>Safety</h3></li>
+    <li><h3>Factory Map</h3></li>
+    <li><h3>Compliance</h3></li>
+  </ul>
+</nav>
+
+<div class="carousel-container">
+    <div class="carousel">
+        <div class="widget" id="maintenance-widget">
+            <h3>Maintenance</h3>
+            <div class="widget-content">
+                <div class="metric">
+                    <span class="metric-label">Open Tasks</span>
+                    <span class="metric-value" id="maintenance-tasks">...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Scheduled Downtime</span>
+                    <span class="metric-value" id="maintenance-downtime">...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Equipment Efficiency</span>
+                    <span class="metric-value" id="equipment-efficiency">...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Preventive Maintenance Compliance</span>
+                    <span class="metric-value" id="pm-compliance">...</span>
+                </div>
+            </div>
+        </div>
+        <div class="widget" id="production-widget">
+            <h3>Production</h3>
+            <div class="widget-content">
+                <div class="metric">
+                    <span class="metric-label">Production Rate</span>
+                    <span class="metric-value" id="production-rate">...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Process Status</span>
+                    <span class="metric-value" id="production-status">...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Total Output</span>
+                    <span class="metric-value" id="production-output">...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Overall Equipment Effectiveness (OEE)</span>
+                    <span class="metric-value" id="oee">...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Capacity Utilization</span>
+                    <span class="metric-value" id="capacity-utilization">...</span>
+                </div>
+            </div>
+        </div>
+        <div class="widget" id="quality-widget">
+            <h3>Quality Control</h3>
+            <div class="widget-content">
+                <div class="metric">
+                    <span class="metric-label">Defect Rate</span>
+                    <span class="metric-value" id="defect-rate">...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Rejected Parts</span>
+                    <span class="metric-value" id="rejected-parts">...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">First Pass Yield</span>
+                    <span class="metric-value" id="first-pass-yield">...</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Customer Complaints</span>
+                    <span class="metric-value" id="customer-complaints">...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="mfg-dashboard-container">
+        <div class="mfg-dashboard">
+            <div class="mfg-kpi">
+                <div class="mfg-kpi-title">Mean Time To Repair</div>
+                <svg class="mfg-gauge" viewBox="0 0 100 50">
+                    <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                    <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                    <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                    <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0h</text>
+                </svg>
+            </div>
+            <!-- Repeat for other KPIs with the mfg- prefix -->
+            <!<div class="mfg-dashboard-container">
+    <div class="mfg-dashboard">
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">Mean Time To Repair</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0h</text>
+            </svg>
+        </div>
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">Non-compliance Events</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0%</text>
+            </svg>
+        </div>
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">On-time Delivery</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0%</text>
+            </svg>
+        </div>
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">Equipment Effectiveness</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0%</text>
+            </svg>
+        </div>
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">Operating Efficiency</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0%</text>
+            </svg>
+        </div>
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">Maintenance Planned</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0%</text>
+            </svg>
+        </div>
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">Plant Downtime</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0%</text>
+            </svg>
+        </div>
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">Inventory Turnover</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0</text>
+            </svg>
+        </div>
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">Carrying Cost</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0%</text>
+            </svg>
+        </div>
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">Stock-to-Sales Ratio</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0</text>
+            </svg>
+        </div>
+        <div class="mfg-kpi">
+            <div class="mfg-kpi-title">Inventory Accuracy</div>
+            <svg class="mfg-gauge" viewBox="0 0 100 50">
+                <path class="mfg-gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" />
+                <path class="mfg-gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" />
+                <line class="mfg-gauge-indicator" x1="50" y1="45" x2="50" y2="5" />
+                <text class="mfg-gauge-value" x="50" y="45" text-anchor="middle">0%</text>
+            </svg>
+        </div>
+    </div>
+</div>-- ... -->
+        </div>
+    </div>
+  
+<section class="factory-highlights">
+   <div class="highlight">
+    <h3>Total Products Out</h3>
+    <div class="highlight-value" id="total-products-out">...</div>
+  </div>
+  <div class="highlight">
+    <h3>Total Defective Parts</h3>
+    <div class="highlight-value" id="total-defective-parts">...</div>
+  </div>
+  <div class="highlight">
+    <h3>Shipped Orders</h3>
+    <div class="highlight-value" id="shipped-orders">...</div>
+  </div>
+  <div class="highlight">
+    <h3>Sales Orders</h3>
+    <div class="highlight-value" id="total-sales-orders">...</div>
+  </div>
+  <div class="highlight">
+    <h3>Scrap Rate</h3>
+    <div class="highlight-value" id="scrap-rate">...</div>
+  </div>
+  <div class="highlight">
+    <h3>Energy Consumption</h3>
+    <div class="highlight-value" id="energy-consumption">...</div>
+  </div>
+  <div class="highlight">
+    <h3>Labor Productivity</h3>
+    <div class="highlight-value" id="labor-productivity">...</div>
+  </div>
+</section>
+
+<section class="factory-map">
+  <h2>Interactive Factory Map</h2>
+  <!-- Zone A101 - A110 -->
+  <div class="zone">
+    <h3>Zone A101 - A110</h3>
+    <!-- Work centers A101 to A105 -->
+  </div>
+
+  <!-- Zone B101 - B110 -->
+  <div class="zone">
+    <h3>Zone B101 - B110</h3>
+    <!-- Work centers B101 to B105 -->
+  </div>
+
+  <!-- Zone C101 - C110 -->
+  <div class="zone">
+    <h3>Zone C101 - C110</h3>
+    <!-- Work centers C101 to C105 -->
+  </div>
+
+  <!-- Zone D101 - D110 -->
+  <div class="zone">
+    <h3>Zone D101 - D110</h3>
+    <!-- Work centers D101 to D105 -->
+  </div>
+
+  <!-- Zone E101 - E110 -->
+  <div class="zone">
+    <h3>Zone E101 - E110</h3>
+    <!-- Work centers E101 to E105 -->
+  </div>
+
+  <!-- Zone F101 - F110 -->
+  <div class="zone">
+    <h3>Zone F101 - F110</h3>
+    <!-- Work centers F101 to F105 -->
+  </div>
+</section>
+
+<section class="financial-overview">
+  <h2>Financial Overview</h2>
+  <div class="financial-metrics-container">
+    <div class="financial-metric" id="ebitda">
+      <h3>EBITDA</h3>
+      <div class="metric-value">$10M</div>
+      <div class="metric-change positive">+5.2%</div>
+      <div class="financial-chart">
+        <!-- Chart bars -->
+      </div>
+    </div>
+    
+    <div class="financial-metric" id="operating-margin">
+      <h3>Operating Margin</h3>
+      <div class="metric-value">18.5%</div>
+      <div class="metric-change negative">-1.3%</div>
+      <div class="financial-chart">
+        <!-- Chart bars -->
+      </div>
+    </div>
+    
+    <div class="financial-metric" id="cash-flow">
+      <h3>Cash Flow</h3>
+      <div class="metric-value">$5.2M</div>
+      <div class="metric-change positive">+2.8%</div>
+      <div class="financial-chart">
+        <!-- Chart bars -->
+      </div>
+    </div>
+    
+    <div class="financial-metric" id="revenue">
+      <h3>Revenue</h3>
+      <div class="metric-value">$50M</div>
+      <div class="metric-change positive">+7.5%</div>
+      <div class="financial-chart">
+        <!-- Chart bars -->
+      </div>
+    </div>
+    
+    <div class="financial-metric" id="net-profit">
+      <h3>Net Profit</h3>
+      <div class="metric-value">$8.7M</div>
+      <div class="metric-change positive">+3.2%</div>
+      <div class="financial-chart">
+        <!-- Chart bars -->
+      </div>
+    </div>
+    
+    <div class="financial-metric" id="debt-to-equity">
+      <h3>Debt to Equity Ratio</h3>
+      <div class="metric-value">0.8</div>
+      <div class="metric-change negative">+0.1</div>
+      <div class="financial-chart">
+        <!-- Chart bars -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="supply-chain-visualization">
+ <h2>Supply Chain Status</h2>
+  <div class="supply-chain-map">
+    <div class="node" id="suppliers">Suppliers</div>
+    <div class="node" id="raw-materials">Raw Materials</div>
+    <div class="node" id="production">Production</div>
+    <div class="node" id="distribution">Distribution</div>
+    <div class="node" id="customers">Customers</div>
+  </div>
+  <div class="supply-chain-metrics">
+    <div class="metric">
+      <span class="metric-label">Supplier On-Time Delivery</span>
+      <span class="metric-value" id="supplier-otd">...</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Raw Material Inventory</span>
+      <span class="metric-value" id="raw-material-inventory">...</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Production Lead Time</span>
+      <span class="metric-value" id="production-lead-time">...</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Distribution Efficiency</span>
+      <span class="metric-value" id="distribution-efficiency">...</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Customer Satisfaction</span>
+      <span class="metric-value" id="customer-satisfaction">...</span>
+    </div>
+  </div>
+</section>
+
+<section class="workforce-analytics">
+  <h2>Workforce Analytics</h2>
+  <div class="workforce-metric">
+    <h3>Headcount</h3>
+    <div class="metric-value" id="headcount">...</div>
+  </div>
+  <div class="workforce-metric">
+    <h3>Absenteeism Rate</h3>
+    <div class="metric-value" id="absenteeism-rate">...</div>
+  </div>
+  <div class="workforce-metric">
+    <h3>Overtime Hours</h3>
+    <div class="metric-value" id="overtime-hours">...</div>
+  </div>
+  <div class="workforce-metric">
+    <h3>Employee Turnover Rate</h3>
+    <div class="metric-value" id="turnover-rate">...</div>
+  </div>
+  <div class="workforce-metric">
+    <h3>Training Completion Rate</h3>
+    <div class="metric-value" id="training-completion-rate">...</div>
+  </div>
+  <div class="workforce-metric">
+    <h3>Employee Satisfaction Score</h3>
+    <div class="metric-value" id="employee-satisfaction">...</div>
+  </div>
+</section>
+
+// Mock data generator
+function generateMockData() {
+  const getRandomPercentage = () => (Math.random() * 20 + 80).toFixed(2) + "%";
+  const getRandomNumber = (max) => Math.floor(Math.random() * max);
+
+  return {
+    maintenanceTasks: getRandomNumber(20),
+    maintenanceDowntime: `${getRandomNumber(8)} hours`,
+    equipmentEfficiency: getRandomPercentage(),
+    pmCompliance: getRandomPercentage(),
+    productionRate: `${getRandomNumber(100)} units/hour`,
+    productionStatus: ["Running", "Idle", "Maintenance"][getRandomNumber(3)],
+    productionOutput: `${getRandomNumber(1000)} units`,
+    oee: getRandomPercentage(),
+    capacityUtilization: getRandomPercentage(),
+    defectRate: (Math.random() * 5).toFixed(2) + "%",
+    rejectedParts: getRandomNumber(50),
+    firstPassYield: `${(Math.random() * 10 + 90).toFixed(2)}%`,
+    customerComplaints: getRandomNumber(10),
+    totalProductsOut: getRandomNumber(10000),
+    totalDefectiveParts: getRandomNumber(500),
+    shippedOrders: getRandomNumber(1000),
+    totalSalesOrders: getRandomNumber(1500),
+    scrapRate: (Math.random() * 5).toFixed(2) + "%",
+    energyConsumption: `${getRandomNumber(1000)} kWh`,
+    laborProductivity: `${(Math.random() * 5 + 90).toFixed(2)}%`,
+    supplierOTD: getRandomPercentage(),
+    rawMaterialInventory: `${getRandomNumber(1000)} units`,
+    productionLeadTime: `${getRandomNumber(24)} hours`,
+    distributionEfficiency: getRandomPercentage(),
+    customerSatisfaction: `${(Math.random() * 2 + 3).toFixed(1)}/5`,
+    headcount: getRandomNumber(500) + 1000,
+    absenteeismRate: (Math.random() * 5).toFixed(2) + "%",
+    overtimeHours: getRandomNumber(1000),
+    turnoverRate: (Math.random() * 10).toFixed(2) + "%",
+    trainingCompletionRate: getRandomPercentage(),
+    employeeSatisfaction: `${(Math.random() * 2 + 3).toFixed(1)}/5`
+  };
+}
+
+// Update dashboard with mock data
+function updateDashboard() {
+  const data = generateMockData();
+  
+  Object.keys(data).forEach(key => {
+    const element = document.getElementById(key.replace(/([A-Z])/g, '-$1').toLowerCase());
+    if (element) {
+      element.textContent = data[key];
+    }
+  });
+}
+
+// Carousel functionality
+let currentSlideIndex = 0;
+const slides = document.querySelectorAll('.widget');
+const carousel = document.querySelector('.carousel');
+
+function showSlide(index) {
+  currentSlideIndex = index;
+  const offset = -index * slides[0].offsetWidth;
+  carousel.style.transform = `translateX(${offset}px)`;
+}
+
+function nextSlide() {
+  currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+  showSlide(currentSlideIndex);
+}
+
+function prevSlide() {
+  currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+  showSlide(currentSlideIndex);
+}
+
+// Interactive financial charts
+function createInteractiveChart(chartElement) {
+  const ctx = chartElement.getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      datasets: [{
+        label: 'Monthly Data',
+        data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 100)),
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    },
+    options: {
+      responsive: true,
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+      plugins: {
+        tooltip: {
+          enabled: true
+        }
+      }
+    }
+  });
+
+  return chart;
+}
+
+// Animate financial charts
+function animateCharts() {
+  const chartElements = document.querySelectorAll('.financial-chart');
+
+  chartElements.forEach(chartElement => {
+    createInteractiveChart(chartElement);
+  });
+}
+
+// Initialize and update dashboard
+document.addEventListener('DOMContentLoaded', () => {
+  updateDashboard();
+  setInterval(updateDashboard, 5000); // Update every 5 seconds
+  setInterval(nextSlide, 10000); // Change slide every 10 seconds
+  animateCharts(); // Initialize interactive charts
+});
+
+// Event listeners for manual navigation (arrow keys)
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+
+// Update charts data periodically
+setInterval(() => {
+  const charts = Chart.instances;
+  charts.forEach(chart => {
+    chart.data.datasets[0].data = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100));
+    chart.update();
+  });
+}, 5000);
+ function setGaugeValue(gauge, value, maxValue, unit, inverse = false) {
+            const indicator = gauge.querySelector('.mfg-gauge-indicator');
+            const fill = gauge.querySelector('.mfg-gauge-fill');
+            const valueText = gauge.querySelector('.mfg-gauge-value');
+            const fillPercentage = inverse ? 1 - (value / maxValue) : (value / maxValue);
+            const angle = fillPercentage * 180 - 90;
+            indicator.style.transform = `rotate(${angle}deg)`;
+            indicator.style.transformOrigin = '50% 45px';
+            
+            let color;
+            if (inverse) {
+                color = fillPercentage > 0.66 ? '#27ae60' : (fillPercentage > 0.33 ? '#f39c12' : '#e74c3c');
+            } else {
+                color = fillPercentage > 0.66 ? '#27ae60' : (fillPercentage > 0.33 ? '#f39c12' : '#e74c3c');
+            }
+            fill.style.stroke = color;
+            
+            const circumference = Math.PI * 40;
+            const fillOffset = circumference * (1 - fillPercentage);
+            fill.style.strokeDasharray = `${circumference} ${circumference}`;
+            fill.style.strokeDashoffset = fillOffset;
+            
+            valueText.textContent = `${value.toFixed(1)}${unit}`;
+            valueText.style.fill = color;
+        }
+
+        function updateData() {
+            const kpis = {
+                'Mean Time To Repair': { value: Math.random() * 5, max: 5, unit: 'h', inverse: true },
+                'Non-compliance Events': { value: Math.floor(Math.random() * 20), max: 20, unit: '', inverse: true },
+                'On-time Delivery': { value: Math.random() * 20 + 80, max: 100, unit: '%' },
+                'Equipment Effectiveness': { value: Math.random() * 20 + 75, max: 100, unit: '%' },
+                'Operating Efficiency': { value: Math.random() * 15 + 80, max: 100, unit: '%' },
+                'Maintenance Planned': { value: Math.random() * 30 + 65, max: 100, unit: '%' },
+                'Plant Downtime': { value: Math.random() * 5, max: 5, unit: '%', inverse: true },
+                'Inventory Turnover': { value: Math.random() * 6 + 2, max: 8, unit: '' },
+                'Carrying Cost': { value: Math.random() * 20 + 10, max: 30, unit: '%', inverse: true },
+                'Stock-to-Sales Ratio': { value: Math.random() * 1.5 + 0.5, max: 2, unit: '' },
+                'Inventory Accuracy': { value: Math.random() * 10 + 90, max: 100, unit: '%' }
+            };
+
+            document.querySelectorAll('.mfg-kpi').forEach(kpi => {
+                const title = kpi.querySelector('.mfg-kpi-title').textContent;
+                const data = kpis[title];
+                if (data) {
+                    const gauge = kpi.querySelector('.mfg-gauge');
+                    setGaugeValue(gauge, data.value, data.max, data.unit, data.inverse);
+                }
+            });
+        }
+
+        setInterval(updateData, 2000);
+        updateData();
+</body>
+</html>

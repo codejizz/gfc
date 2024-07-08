@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Work Order</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #444;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            background-color: #555;
+            color: #fff;
+        }
+        input[type="submit"],
+        input[type="file"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover,
+        input[type="file"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Maintenance Work Order</h1>
+    <form>
+        <label for="workcenter">Work Center:</label>
+        <select id="workcenter" name="Work Center">
+            <option value="">Select Work Center</option>
+            <option value="workcenter">RAW</option>
+            <option value="workcenter">INSP</option>
+	    <option value="workcenter">PREP</option>
+            <option value="workcenter">CAN</option>
+	    <option value="workcenter">INSP</option>
+            <option value="workcenter">WGHT</option>
+	    <option value="workcenter">SMPL</option>
+            <option value="workcenter">INSP</option>
+ 	    <option value="workcenter">PACK</option>
+            <option value="workcenter">INVN</option>
+            <optgroup label="Production Line 1">
+                <option value="a101">a101</option>
+                <option value="a102">a102</option>
+ 		<option value="a103">a103</option>
+                <option value="a104">a104</option>
+		<option value="a105">a105</option>
+                <option value="a106">a106</option>
+ 		<option value="a107">a107</option>
+                <option value="a108">a108</option>
+                <!-- Add more options for a103 to a110 -->
+            </optgroup>
+            <optgroup label="Production Line 2">
+                <option value="b101">b101</option>
+                <option value="b102">b102</option>
+		<option value="b103">b103</option>
+                <option value="b104">b104</option>
+ 		<option value="b105">b105</option>
+                <option value="b106">b106</option>
+		<option value="b107">b107</option>
+                <option value="b108">b108</option>
+                <!-- Add more options for b103 to b110 -->
+            </optgroup>
+        </select>
+        <label for="description">Description of Work:</label>
+        <textarea id="description" name="description" rows="4" placeholder="Enter a detailed description of the work required"></textarea>
+        <label for="reason">Reason:</label>
+        <select id="reason" name="reason">
+            <option value="planned-maintenance">Planned Maintenance</option>
+            <option value="unplanned-maintenance">Unplanned Maintenance</option>
+            <option value="process-engineering">Process Engineering</option>
+            <option value="qual">Quality</option>
+            <option value="preventive-maintenance">Preventive Maintenance</option>
+        </select>
+        <label for="priority">Priority:</label>
+        <select id="priority" name="priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+        <label for="requested-by">Requested By:</label>
+        <select id="requested-by" name="requested-by">
+            <option value="">Select Name</option>
+            <option value="john-doe">John Doe</option>
+            <option value="jane-smith">Jane Smith</option>
+            <option value="bob-johnson">Bob Johnson</option>
+            <option value="emily-wilson">Emily Wilson</option>
+            <option value="michael-brown">Michael Brown</option>
+        </select>
+        <label for="technician">Technician:</label>
+        <select id="technician" name="technician">
+            <option value="">Select Technician</option>
+            <option value="tech1">John Doe</option>
+            <option value="tech2">Jane Smith</option>
+            <option value="tech3">Bob Johnson</option>
+            <!-- Add more technician options -->
+        </select>
+        <label for="schematic">Schematic:</label>
+        <div>
+            <select id="schematic" name="schematic">
+                <option value="">Select Schematic</option>
+                <option value="schematic1">A101</option>
+                <option value="schematic2">A102</option>
+		<option value="schematic1">A103</option>
+                <option value="schematic2">A104</option>
+		<option value="schematic1">A105</option>
+                <option value="schematic2">A106</option>
+		<option value="schematic1">B101</option>
+                <option value="schematic2">B102</option>
+		<option value="schematic1">B103</option>
+                <option value="schematic2">B104</option>
+		<option value="schematic1">B105</option>
+                <option value="schematic2">B106</option>
+                <!-- Add more schematic options -->
+            </select>
+            <input type="file" id="schematic-upload" name="schematic-upload" accept="image/*">
+            <img id="schematic-preview" src="" alt="Schematic Preview" style="max-width: 100%; display: none;">
+        </div>
+        <label for="manual">Manual:</label>
+        <div>
+            <select id="manual" name="manual">
+                <option value="">Select Manual</option>
+                <option value="manual1">A101</option>
+                <option value="manual2">A102</option>
+		<option value="manual2">A103</option>
+		<option value="manual2">A104</option>
+		<option value="manual2">A105</option>
+		<option value="manual2">A106</option>
+		<option value="manual2">B102</option>
+		<option value="manual2">B103</option>
+		<option value="manual2">B104</option>
+		<option value="manual2">B105</option>
+		<option value="manual2">B106</option>
+		<option value="manual2">B107</option>
+                <!-- Add more manual options -->
+            </select>
+            <input type="file" id="manual-upload" name="manual-upload" accept="image/*">
+            <img id="manual-preview" src="" alt="Manual Preview" style="max-width: 100%; display: none;">
+        </div>
+        <label for="due-date">Due Date:</label>
+        <input type="text" id="due-date" name="due-date" placeholder="Enter the due date (MM/DD/YYYY)">
+        <input type="submit" value="Submit Work Order">
+    </form>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.M.A.R.T. MES Central Gear System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a3a8f;
+            --secondary-color: #4a90e2;
+            --text-color: #333333;
+            --background-color: #f5f5f5;
+            --white: #ffffff;
+            --light-gray: #e0e0e0;
+            --dark-gray: #555555;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .gear-system {
+            position: relative;
+            width: 800px;
+            height: 800px;
+            overflow: hidden;
+        }
+
+        .central-gear, .global-dashboard-header, .container {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .circle, .global-ticker, .action-button, .carousel-card {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .central-gear {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .central-gear:hover {
+            box-shadow: 0 0 30px rgba(26, 58, 143, 0.9);
+        }
+
+        .central-gear-outer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 20px dashed var(--secondary-color);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .title-container {
+            text-align: center;
+            color: var(--white);
+        }
+
+        .title {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            margin: 5px 0 0;
+        }
+
+        .circle {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+        }
+
+        .icon-gear {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 10px dashed var(--primary-color);
+            border-radius: 50%;
+            animation: rotate-reverse 10s linear infinite;
+        }
+
+        @keyframes rotate-reverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .circle i {
+            font-size: 36px;
+            z-index: 1;
+        }
+
+        .icon-name {
+            margin-top: 5px;
+            font-size: 14px;
+            z-index: 1;
+        }
+
+        .container {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 20;
+        }
+
+        .container.open {
+            display: block;
+        }
+
+        .global-dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .global-ticker {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .ticker-wrap {
+            overflow: hidden;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-right: 100%;
+            animation: ticker 30s linear infinite;
+        }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        .ticker-item {
+            display: inline-block;
+            padding: 0 2rem;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .metric-cards {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            width: 23%;
+            background-color: var(--white);
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .metric-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .alert {
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .alert-danger {
+            background-color: var(--danger-color);
+            color: var(--white);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .action-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="gear-system" id="gearSystem">
+        <div class="central-gear">
+            <div class="central-gear-outer"></div>
+            <div class="title-container">
+                <h1 class="title">Geared for Success</h1>
+                <h2 class="subtitle">S.M.A.R.T. MES</h2>
+            </div>
+        </div>
+        <a href="#" class="circle" onclick="toggleContainer(1)" style="top: 20%; left: 20%;">
+            <div class="icon-gear"></div>
+            <i class="fas fa-cogs"></i>
+            <span class="icon-name">Production</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(2)" style="top: 20%; right: 20%;">
+            <div class="icon-gear"></div>
+            <i class="fas fa-wrench"></i>
+            <span class="icon-name">Maintenance</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(3)" style="bottom: 20%; left: 20%;">
+            <div class="icon-gear"></div>
+            <i class="fas fa-check-circle"></i>
+            <span class="icon-name">Quality</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(4)" style="bottom: 20%; right: 20%;">
+            <div class="icon-gear"></div>
+            <i class="fas fa-box"></i>
+            <span class="icon-name">Inventory</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(5)" style="top: 50%; left: 5%;">
+            <div class="icon-gear"></div>
+            <i class="fas fa-shipping-fast"></i>
+            <span class="icon-name">Shipping</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(6)" style="top: 50%; right: 5%;">
+            <div class="icon-gear"></div>
+            <i class="fas fa-hard-hat"></i>
+            <span class="icon-name">Safety</span>
+        </a>
+
+        <div id="container1" class="container">
+            <div class="global-dashboard-header">
+                <h2>Production Dashboard</h2>
+            </div>
+            <div class="global-ticker">
+                <div class="ticker-wrap">
+                    <div class="ticker">
+                        <div class="ticker-item">OEE: <span id="oee">85%</span></div>
+                        <div class="ticker-item">Output: <span id="output">1000</span> units</div>
+                        <div class="ticker-item">Uptime: <span id="uptime">95%</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="productionChart"></canvas>
+            </div>
+            <div class="metric-cards">
+                <div class="metric-card">
+                    <h3>Daily Production</h3>
+                    <div class="metric-value" id="dailyProduction">5,000</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Efficiency</h3>
+                    <div class="metric-value" id="efficiency">92%</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Quality Rate</h3>
+                    <div class="metric-value" id="qualityRate">98.5%</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Downtime</h3>
+                    <div class="metric-value" id="downtime">2.5%</div>
+                </div>
+            </div>
+            <div class="alert alert-danger pulse">
+                <i class="fas fa-exclamation-triangle"></i> Critical: Machine 3 requires immediate maintenance!
+            </div>
+            <div class="action-buttons">
+                <button class="action-button">Start New Batch</button>
+                <button class="action-button">Schedule Maintenance</button>
+                <button class="action-button">Generate Report</button>
+            </div>
+        </div>
+
+        <!-- Add similar structure for other containers (2-6) here -->
+
+    </div>
+
+    <script>
+        function toggleContainer(containerId) {
+            const containers = document.querySelectorAll('.container');
+            containers.forEach(container => container.classList.remove('open'));
+            document.getElementById(`container${containerId}`).classList.add('open');
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('productionChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Production Output',
+                        data: [12000, 19000, 15000, 17000, 22000, 24000],
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function updateMetrics() {
+            document.getElementById('oee').textContent = `${Math.floor(Math.random() * 10) + 80}%`;
+            document.getElementById('output').textContent = Math.floor(Math.random() * 500) + 800;
+            document.getElementById('uptime').textContent = `${Math.floor(Math.random() * 5) + 93}%`;
+            document.getElementById('dailyProduction').textContent = Math.floor(Math.random() * 1000) + 4500;
+            document.getElementById('efficiency').textContent = `${Math.floor(Math.random() * 5) + 90}%`;
+            document.getElementById('qualityRate').textContent = `${(Math.random() * (99.9 - 98) + 98).toFixed(1)}%`;
+            document.getElementById('downtime').textContent = `${(Math.random() * (5 - 1) + 1).toFixed(1)}%`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            setInterval(updateMetrics, 5000);
+        });
+    </script>
+</body>
+</html>

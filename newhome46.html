@@ -1,0 +1,1189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.M.A.R.T. MES Central Gear System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .gear-system {
+            position: relative;
+            width: 800px;
+            height: 800px;
+            overflow: hidden;
+        }
+        .central-gear {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background-color: #3498db;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .central-gear:hover {
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.5);
+        }
+        .central-gear-outer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 20px dashed #2980b9;
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .title-container {
+            text-align: center;
+            color: white;
+        }
+        .title {
+            font-size: 28px;
+            margin: 0;
+        }
+        .subtitle {
+            font-size: 20px;
+            margin: 5px 0 0;
+        }
+        .circle {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-color: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.5);
+        }
+        .icon-gear {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 10px dashed #c0392b;
+            border-radius: 50%;
+            animation: rotate-reverse 10s linear infinite;
+        }
+        @keyframes rotate-reverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .circle i {
+            font-size: 36px;
+            z-index: 1;
+        }
+        .icon-name {
+            margin-top: 5px;
+            font-size: 14px;
+            z-index: 1;
+        }
+        .background-gear {
+            position: absolute;
+            border-radius: 50%;
+            border: 5px dashed rgba(52, 152, 219, 0.3);
+            animation: rotate 30s linear infinite;
+        }
+       
+
+ 
+
+        .container.active {
+            display: block;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+        .close:hover {
+            color: #e74c3c;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .dashboard-header h2 {
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .user-name {
+            font-size: 16px;
+            color: #fff;
+        }
+      
+   
+
+.container {
+    width: 80%;
+ display: none;
+            position: absolute;
+    margin: 20px auto;
+    background: #000;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    display: none;
+top: 50%;
+            left: 50%;
+ transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vh;
+	    max-width: 800px;
+ overflow-y: auto;
+            z-index: 200;
+            transition: all 0.3s ease;
+}
+
+.global-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #fff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.global-header-left {
+    display: flex;
+    align-items: center;
+}
+
+.global-header-left h2 {
+    margin: 0;
+    color: #007BFF;
+}
+
+.global-user-profile {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.global-user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #007BFF;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+ 
+
+.global-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.global-user-name {
+    font-weight: bold;
+    color: #fff;
+}
+
+.global-user-title {
+    font-size: 0.9em;
+    color: #fff;
+}
+
+.global-header-right {
+    display: flex;
+    align-items: center;
+}
+
+.global-search-bar {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.global-search-bar input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.global-search-bar button {
+    padding: 5px;
+    background: #007BFF;
+    border: none;
+    color: #fff;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+}
+
+.global-search-bar button i {
+    font-size: 1em;
+}
+
+.global-file-upload {
+    display: flex;
+    align-items: center;
+}
+
+.global-file-upload-label {
+    display: flex;
+    align-items: center;
+    background: #007BFF;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.global-file-upload-input {
+    display: none;
+}
+
+.global-ticker {
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.global-ticker-content {
+    display: flex;
+    justify-content: space-around;
+    animation: ticker 15s linear infinite;
+}
+
+.global-ticker-content span {
+    margin: 0 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+@keyframes ticker {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.global-dashboard-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.global-dashboard-section {
+    flex: 1;
+    min-width: 45%;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.global-dashboard-section h3 {
+    margin-top: 0;
+    color: #007BFF;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #fff;
+}
+
+ .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .close-popup {
+            align-self: flex-end;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-in;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .updated {
+            animation: updated 1s ease-in-out;
+        }
+
+        @keyframes updated {
+            from {
+                background-color: yellow;
+            }
+            to {
+                background-color: transparent;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .production-item {
+                flex: 0 0 calc(50% - 20px); /* Adjusted width for smaller screens */
+            }
+
+            .quality-chart {
+                height: 300px; /* Adjusted height for smaller screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .production-item {
+                flex: 0 0 100%; /* Full width on smaller screens */
+            }
+
+            .quality-chart {
+                height: 250px; /* Adjusted height for very small screens */
+            }
+        }
+ .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+      /* Search bar styles */
+.global-search-bar {
+    display: flex;
+    margin-right: 15px;
+}
+
+.global-search-bar input {
+    padding: 8px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.global-search-bar button {
+    padding: 8px 12px;
+    background-color: #3498db;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.global-search-bar button:hover {
+    background-color: #2980b9;
+}
+
+/* File upload styles */
+.global-file-upload-label {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #2ecc71;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.global-file-upload-label:hover {
+    background-color: #27ae60;
+}
+
+.global-file-upload-input {
+    display: none;
+}
+
+/* Ticker styles */
+.global-ticker {
+    background-color: #34495e;
+    color: white;
+    padding: 10px 0;
+    overflow: hidden;
+}
+
+.global-ticker-content {
+    display: flex;
+    animation: ticker 20s linear infinite;
+}
+
+@keyframes ticker {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.global-ticker-content span {
+    padding: 0 20px;
+    white-space: nowrap;
+}
+
+/* Dashboard content styles */
+.global-dashboard-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(100% - 120px);
+}
+
+.global-dashboard-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.global-dashboard-section h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+/* Close button styles */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #e74c3c;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .global-dashboard-content {
+        grid-template-columns: 1fr;
+    }
+
+    .global-header-right {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .global-search-bar {
+        margin-bottom: 10px;
+    }
+}
+
+/* Dark mode toggle */
+#darkModeToggle {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+/* Dark mode styles */
+.dark-mode {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+.dark-mode .global-dashboard-header {
+    background-color: #2c3e50;
+}
+
+.dark-mode .global-dashboard-section {
+    background-color: #2c3e50;
+    color: #f0f0f0;
+}
+
+.dark-mode .global-dashboard-section h3 {
+    color: #3498db;
+    border-bottom-color: #3498db;
+}
+
+.dark-mode .global-ticker {
+    background-color: #34495e;
+}
+
+/* Add specific styles for each container if needed */
+#container3 .global-dashboard-header { background-color: #8e44ad; }
+#container4 .global-dashboard-header { background-color: #d35400; }
+#container5 .global-dashboard-header { background-color: #16a085; }
+#container6 .global-dashboard-header { background-color: #c0392b; }
+#container7 .global-dashboard-header { background-color: #2980b9; }
+#container8 .global-dashboard-header { background-color: #27ae60; }
+
+/* You can add more specific styles for each container as needed */
+
+      </style>
+
+</head>
+<body>
+    <div class="gear-system" id="gearSystem">
+        <div class="central-gear">
+            <div class="central-gear-outer"></div>
+            <div class="title-container">
+                <h1 class="title">Geared for Success</h1>
+                <h2 class="subtitle">S.M.A.R.T. MES</h2>
+            </div>
+        </div>
+
+        <a href="#" class="circle" onclick="toggleContainer(1)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-cogs"></i>
+            <span class="icon-name">Production</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(2)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-wrench"></i>
+            <span class="icon-name">Maintenance</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(3)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-check-circle"></i>
+            <span class="icon-name">Quality</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(4)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-box"></i>
+            <span class="icon-name">Inventory</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(5)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-shipping-fast"></i>
+            <span class="icon-name">Shipping</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(6)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-hard-hat"></i>
+            <span class="icon-name">Safety</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(7)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-users"></i>
+            <span class="icon-name">HR</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(8)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-cogs"></i>
+            <span class="icon-name">Support</span>
+        </a>
+    </div>
+
+  <div id="container1" class="container">
+    <div class="global-dashboard-header">
+  <button id="darkModeToggle">🌓</button>
+        <div class="global-header-left">
+            <h2>Production Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">JD</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">John Doe</span>
+                    <span class="global-user-title">Production Manager</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-1" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload File
+                </label>
+                <input id="file-upload-1" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+   
+
+    <div class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Production Rate: 95%</span>
+            <span>Efficiency: 92%</span>
+            <span>Quality Score: 98%</span>
+            <span>Downtime: 3%</span>
+        </div>
+    </div>
+    <div class="global-dashboard-content">
+        <section class="global-dashboard-section">
+            <h3>Production Overview</h3>
+            <!-- Add production overview content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Efficiency Metrics</h3>
+            <!-- Add efficiency metrics content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Quality Control</h3>
+            <!-- Add quality control content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Resource Allocation</h3>
+            <!-- Add resource allocation content here -->
+        </section>
+    </div>
+    <span class="close" onclick="toggleContainer(0)">&times;</span>
+</div>
+
+
+
+
+
+
+ <div id="container2" class="container">
+    <div class="global-dashboard-header">
+        <div class="global-header-left">
+            <h2>Maintenance Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">MS</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">Mike Smith</span>
+                    <span class="global-user-title">Maintenance Supervisor</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-2" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload File
+                </label>
+                <input id="file-upload-2" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+    <div class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Equipment Uptime: 98%</span>
+            <span>Scheduled Maintenance: 5</span>
+            <span>Pending Repairs: 3</span>
+            <span>Maintenance Costs: $12,500</span>
+        </div>
+    </div>
+    <div class="global-dashboard-content">
+        <section class="global-dashboard-section">
+            <h3>Equipment Status</h3>
+            <!-- Add equipment status content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Maintenance Schedule</h3>
+            <!-- Add maintenance schedule content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Repair Requests</h3>
+            <!-- Add repair requests content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Inventory Management</h3>
+            <!-- Add inventory management content here -->
+        </section>
+    </div>
+    <span class="close" onclick="toggleContainer(0)">&times;</span>
+</div>
+
+
+
+
+
+<div id="container3" class="container">
+    <div class="global-dashboard-header">
+        <div class="global-header-left">
+            <h2>Quality Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">LJ</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">Lisa Johnson</span>
+                    <span class="global-user-title">Quality Assurance Manager</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-3" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload File
+                </label>
+                <input id="file-upload-3" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+    <div class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Product Defect Rate: 0.5%</span>
+            <span>Customer Satisfaction: 98%</span>
+            <span>Quality Audits Completed: 12</span>
+            <span>Improvement Projects: 3</span>
+        </div>
+    </div>
+    <div class="global-dashboard-content">
+        <section class="global-dashboard-section">
+            <h3>Quality Metrics</h3>
+            <!-- Add quality metrics content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Inspection Reports</h3>
+            <!-- Add inspection reports content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Customer Feedback</h3>
+            <!-- Add customer feedback content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Continuous Improvement</h3>
+            <!-- Add continuous improvement content here -->
+        </section>
+    </div>
+    <span class="close" onclick="toggleContainer(0)">&times;</span>
+</div>
+
+
+
+
+
+<div id="container4" class="container">
+    <div class="global-dashboard-header">
+        <div class="global-header-left">
+            <h2>Inventory Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">RB</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">Rachel Brown</span>
+                    <span class="global-user-title">Inventory Manager</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-4" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload File
+                </label>
+                <input id="file-upload-4" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+    <div class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Total SKUs: 1,250</span>
+            <span>Stock Turnover Rate: 12x/year</span>
+            <span>Low Stock Alerts: 15</span>
+            <span>Inventory Value: $2.5M</span>
+        </div>
+    </div>
+    <div class="global-dashboard-content">
+        <section class="global-dashboard-section">
+            <h3>Inventory Levels</h3>
+            <!-- Add inventory levels content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Stock Movement</h3>
+            <!-- Add stock movement content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Reorder Points</h3>
+            <!-- Add reorder points content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Supplier Performance</h3>
+            <!-- Add supplier performance content here -->
+        </section>
+    </div>
+    <span class="close" onclick="toggleContainer(0)">&times;</span>
+</div>
+
+
+
+
+<div id="container5" class="container">
+    <div class="global-dashboard-header">
+        <div class="global-header-left">
+            <h2>Shipping Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">TN</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">Tom Nelson</span>
+                    <span class="global-user-title">Logistics Coordinator</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-5" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload File
+                </label>
+                <input id="file-upload-5" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+    <div class="global-ticker">
+        <div class="global-ticker-content">
+            <span>On-Time Deliveries: 97%</span>
+            <span>Average Transit Time: 3.2 days</span>
+            <span>Shipments in Transit: 42</span>
+            <span>Shipping Costs: $35,000/month</span>
+        </div>
+    </div>
+    <div class="global-dashboard-content">
+        <section class="global-dashboard-section">
+            <h3>Shipment Tracking</h3>
+            <!-- Add shipment tracking content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Delivery Performance</h3>
+            <!-- Add delivery performance content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Carrier Metrics</h3>
+            <!-- Add carrier metrics content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Cost Analysis</h3>
+            <!-- Add cost analysis content here -->
+        </section>
+    </div>
+    <span class="close" onclick="toggleContainer(0)">&times;</span>
+</div>
+
+
+
+<div id="container6" class="container">
+    <div class="global-dashboard-header">
+        <div class="global-header-left">
+            <h2>Safety Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">EH</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">Emma Harris</span>
+                    <span class="global-user-title">Safety Officer</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-6" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload File
+                </label>
+                <input id="file-upload-6" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+    <div class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Days Without Incident: 365</span>
+            <span>Safety Training Completion: 100%</span>
+            <span>Open Safety Reports: 2</span>
+            <span>Safety Audit Score: 98/100</span>
+        </div>
+    </div>
+    <div class="global-dashboard-content">
+        <section class="global-dashboard-section">
+            <h3>Incident Reports</h3>
+            <!-- Add incident reports content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Safety Training</h3>
+            <!-- Add safety training content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Risk Assessment</h3>
+            <!-- Add risk assessment content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Safety Compliance</h3>
+            <!-- Add safety compliance content here -->
+        </section>
+    </div>
+    <span class="close" onclick="toggleContainer(0)">&times;</span>
+</div>
+
+
+
+<div id="container7" class="container">
+    <div class="global-dashboard-header">
+        <div class="global-header-left">
+            <h2>HR Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">SP</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">Sarah Parker</span>
+                    <span class="global-user-title">HR Director</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-7" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload File
+                </label>
+                <input id="file-upload-7" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+    <div class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Employee Satisfaction: 87%</span>
+            <span>Open Positions: 5</span>
+            <span>Training Hours: 250</span>
+            <span>Turnover Rate: 5%</span>
+        </div>
+    </div>
+    <div class="global-dashboard-content">
+        <section class="global-dashboard-section">
+            <h3>Employee Overview</h3>
+            <!-- Add employee overview content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Recruitment</h3>
+            <!-- Add recruitment content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Performance Management</h3>
+            <!-- Add performance management content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Training and Development</h3>
+            <!-- Add training and development content here -->
+        </section>
+    </div>
+    <span class="close" onclick="toggleContainer(0)">&times;</span>
+</div>
+
+
+
+
+<div id="container8" class="container">
+    <div class="global-dashboard-header">
+        <div class="global-header-left">
+            <h2>Support Dashboard</h2>
+            <div class="global-user-profile">
+                <div class="global-user-avatar">DM</div>
+                <div class="global-user-info">
+                    <span class="global-user-name">David Miller</span>
+                    <span class="global-user-title">Support Manager</span>
+                </div>
+            </div>
+        </div>
+        <div class="global-header-right">
+            <div class="global-search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="global-file-upload">
+                <label for="file-upload-8" class="global-file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload File
+                </label>
+                <input id="file-upload-8" type="file" class="global-file-upload-input">
+            </div>
+        </div>
+    </div>
+    <div class="global-ticker">
+        <div class="global-ticker-content">
+            <span>Open Tickets: 15</span>
+            <span>Average Response Time: 2.5 hours</span>
+            <span>Customer Satisfaction: 95%</span>
+            <span>Knowledge Base Articles: 250</span>
+        </div>
+    </div>
+    <div class="global-dashboard-content">
+        <section class="global-dashboard-section">
+            <h3>Ticket Overview</h3>
+            <!-- Add ticket overview content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Support Performance</h3>
+            <!-- Add support performance content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Customer Feedback</h3>
+            <!-- Add customer feedback content here -->
+        </section>
+        <section class="global-dashboard-section">
+            <h3>Knowledge Management</h3>
+            <!-- Add knowledge management content here -->
+        </section>
+    </div>
+    <span class="close" onclick="toggleContainer(0)">&times;</span>
+</div>
+
+
+  <script>
+  
+document.addEventListener('DOMContentLoaded', function() {
+    addBackgroundGears();
+    positionCircles();
+});
+
+function addBackgroundGears() {
+    const gearSystem = document.getElementById('gearSystem');
+    const numGears = 60;
+    for (let i = 0; i < numGears; i++) {
+        const gear = document.createElement('div');
+        gear.classList.add('background-gear');
+        const size = Math.random() * 160 + 20;
+        gear.style.width = `${size}px`;
+        gear.style.height = `${size}px`;
+        const maxX = gearSystem.offsetWidth - size;
+        const maxY = gearSystem.offsetHeight - size;
+        gear.style.left = `${Math.random() * maxX}px`;
+        gear.style.top = `${Math.random() * maxY}px`;
+        const rotationDuration = Math.random() * 20 + 10;
+        const rotationDirection = Math.random() < 0.8 ? 'normal' : 'reverse';
+        gear.style.animation = `rotate ${rotationDuration}s linear infinite ${rotationDirection}`;
+        gearSystem.appendChild(gear);
+    }
+}
+
+function positionCircles() {
+    const gearSystem = document.getElementById('gearSystem');
+    const circles = document.querySelectorAll('.circle');
+    const centerX = gearSystem.offsetWidth / 2;
+    const centerY = gearSystem.offsetHeight / 2;
+    const radius = 300;
+    circles.forEach((circle, index) => {
+        const angle = (index / circles.length) * 2 * Math.PI;
+        const x = centerX + radius * Math.cos(angle) - circle.offsetWidth / 2;
+        const y = centerY + radius * Math.sin(angle) - circle.offsetHeight / 2;
+        circle.style.left = `${x}px`;
+        circle.style.top = `${y}px`;
+    });
+}
+
+function toggleContainer(index) {
+    const containers = document.querySelectorAll('.container');
+    const overlay = document.getElementById('overlay');
+    if (index === 0) {
+        containers.forEach(container => {
+            container.classList.remove('active');
+        });
+        overlay.style.display = 'none';
+    } else {
+        containers.forEach(container => {
+            container.classList.remove('active');
+        });
+        const container = document.getElementById(`container${index}`);
+        if (container) {
+            container.classList.add('active');
+            overlay.style.display = 'block';
+        }
+    }
+}
+  </script>
+  </body>
+  </html>

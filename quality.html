@@ -1,0 +1,83 @@
+
+
+<div class="container" id="quality-container">
+        <div class="dashboard-header">
+            <h2>Quality Dashboard</h2>
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <span>John Doe - Quality Manager</span>
+            </div>
+        </div>
+
+        <div class="overview-panel">
+            <div class="metric">
+                <h4>Defect Rate</h4>
+                <p class="large-number">2.5%</p>
+                <p>Last updated: 2024-06-27</p>
+                <p>Target: 2%</p>
+            </div>
+            <div class="metric">
+                <h4>Defective Products</h4>
+                <p class="large-number">65</p>
+                <p>Total Produced: 2500</p>
+                <p>Rejected: 25</p>
+            </div>
+            <div class="metric">
+                <h4>Customer Complaints</h4>
+                <p class="large-number">5</p>
+                <p>Last Week: 10</p>
+                <p>Resolved: 5</p>
+            </div>
+        </div>
+
+        <div class="search-filter">
+            <input type="text" class="search-bar" placeholder="Search defects...">
+            <select class="filter-dropdown">
+                <option value="">Filter by type</option>
+                <option value="minor">Minor</option>
+                <option value="major">Major</option>
+                <option value="critical">Critical</option>
+            </select>
+        </div>
+
+        <ul class="defects-list">
+            <li class="defect">
+                <div class="defect-details">
+                    <h3>Minor Defect A</h3>
+                    <p>Machine: Machine A</p>
+                    <p>Reported: 2024-06-26</p>
+                </div>
+                <div class="defect-actions">
+                    <button class="action-button">View Details</button>
+                    <button class="action-button">Resolve</button>
+                </div>
+            </li>
+            <li class="defect">
+                <div class="defect-details">
+                    <h3>Major Defect B</h3>
+                    <p>Machine: Machine B</p>
+                    <p>Reported: 2024-06-25</p>
+                </div>
+                <div class="defect-actions">
+                    <button class="action-button">View Details</button>
+                    <button class="action-button">Resolve</button>
+                </div>
+            </li>
+            <li class="defect">
+                <div class="defect-details">
+                    <h3>Critical Defect C</h3>
+                    <p>Machine: Machine C</p>
+                    <p>Reported: 2024-06-24</p>
+                </div>
+                <div class="defect-actions">
+                    <button class="action-button">View Details</button>
+                    <button class="action-button">Resolve</button>
+                </div>
+            </li>
+        </ul>
+
+        <div class="quality-chart">
+            <h3>Defects Analysis</h3>
+            <div id="defects-chart"></div>
+        </div>
+    </div>

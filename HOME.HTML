@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.M.A.R.T. MES Central Gear System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e6e6e6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.gear-system {
+    position: relative;
+    width: 800px;
+    height: 800px;
+    overflow: hidden;
+}
+.central-gear {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background-color: #1a3a8f;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+}
+.central-gear:hover {
+    box-shadow: 0 0 30px rgba(26, 58, 143, 0.9);
+}
+.central-gear-outer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 20px dashed #4a90e2;
+    border-radius: 50%;
+    animation: rotate 20s linear infinite;
+}
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.title-container {
+    text-align: center;
+    color: white;
+}
+.title {
+    font-size: 28px;
+    margin: 0;
+}
+.subtitle {
+    font-size: 20px;
+    margin: 5px 0 0;
+}
+.circle {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background-color: #4a90e2;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+.circle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+}
+.icon-gear {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 10px dashed #1a3a8f;
+    border-radius: 50%;
+    animation: rotate-reverse 10s linear infinite;
+}
+@keyframes rotate-reverse {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+.circle i {
+    font-size: 36px;
+    z-index: 1;
+}
+.icon-name {
+    margin-top: 5px;
+    font-size: 14px;
+    z-index: 1;
+}
+.background-gear {
+    position: absolute;
+    border-radius: 50%;
+    border: 5px dashed rgba(74, 144, 226, 0.25);
+    animation: rotate 30s linear infinite;
+}
+
+.container.active {
+    display: block;
+}
+.close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s ease;
+}
+.close:hover {
+    color: #e74c3c;
+}
+  /* Your existing CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="gear-system" id="gearSystem">
+        <div class="central-gear">
+            <div class="central-gear-outer"></div>
+            <div class="title-container">
+                <h1 class="title">Geared for Success</h1>
+                <h2 class="subtitle">S.M.A.R.T. MES</h2>
+            </div>
+        </div>
+
+        <a href="#" class="circle" onclick="openPage('GHSAT0AAAAAACR7RRXMPC75L3G4YEZILIAQZUMD62Q')">
+            <div class="icon-gear"></div>
+            <i class="fas fa-cogs"></i>
+            <span class="icon-name">Production</span>
+        </a>
+        <a href="#" class="circle" onclick="openPage('https://raw.githubusercontent.com/codejizz/MES/main/EXECUTIVEMAINTENANCE.HTML?token=GHSAT0AAAAAACR7RRXMAAYBTAJ4UWLVHZXYZUMDWRA')">
+            <div class="icon-gear"></div>
+            <i class="fas fa-wrench"></i>
+            <span class="icon-name">Maintenance</span>
+        </a>
+        <a href="#" class="circle" onclick="openPage('https://raw.githubusercontent.com/codejizz/MES/main/EXCUTIVEQUALITYL.HTML?token=GHSAT0AAAAAACR7RRXM2PP4ZHLEYH4YBK5IZUMB37Q')">
+            <div class="icon-gear"></div>
+            <i class="fas fa-check-circle"></i>
+            <span class="icon-name">Quality</span>
+        </a>
+        <a href="#" class="circle" onclick="openPage('https://raw.githubusercontent.com/codejizz/MES/main/inventory.html?token=GHSAT0AAAAAACR7RRXNM5352CAQP2YSU4RSZUMDVPQ')">
+            <div class="icon-gear"></div>
+            <i class="fas fa-box"></i>
+            <span class="icon-name">Inventory</span>
+        </a>
+        <a href="#" class="circle" onclick="openPage('https://raw.githubusercontent.com/yourusername/yourrepository/main/shipping.html')">
+            <div class="icon-gear"></div>
+            <i class="fas fa-shipping-fast"></i>
+            <span class="icon-name">Shipping</span>
+        </a>
+        <a href="#" class="circle" onclick="openPage('GHSAT0AAAAAACR7RRXM57LKSKVUYSYNKC3GZUMDUJA')">
+            <div class="icon-gear"></div>
+            <i class="fas fa-hard-hat"></i>
+            <span class="icon-name">Safety</span>
+        </a>
+        <a href="#" class="circle" onclick="openPage('https://raw.githubusercontent.com/codejizz/MES/main/inlinemap7.html?token=GHSAT0AAAAAACR7RRXNOCNBN6ACCRIVSVI4ZUMDZJA')">
+            <div class="icon-gear"></div>
+            <i class="fas fa-users"></i>
+            <span class="icon-name">Interactive Factory</span>
+        </a>
+        <a href="#" class="circle" onclick="openPage('https://raw.githubusercontent.com/codejizz/MES/main/kpis.html?token=GHSAT0AAAAAACR7RRXMD6Y5CZIIFMHNZHSOZUMDX4Q')">
+            <div class="icon-gear"></div>
+            <i class="fas fa-cogs"></i>
+            <span class="icon-name">KPIs</span>
+        </a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            addBackgroundGears();
+            positionCircles();
+        });
+
+        function addBackgroundGears() {
+            const gearSystem = document.getElementById('gearSystem');
+            const numGears = 60;
+            for (let i = 0; i < numGears; i++) {
+                const gear = document.createElement('div');
+                gear.classList.add('background-gear');
+                const size = Math.random() * 160 + 20;
+                gear.style.width = `${size}px`;
+                gear.style.height = `${size}px`;
+                const maxX = gearSystem.offsetWidth - size;
+                const maxY = gearSystem.offsetHeight - size;
+                gear.style.left = `${Math.random() * maxX}px`;
+                gear.style.top = `${Math.random() * maxY}px`;
+                const rotationDuration = Math.random() * 20 + 10;
+                const rotationDirection = Math.random() < 0.8 ? 'normal' : 'reverse';
+                gear.style.animation = `rotate ${rotationDuration}s linear infinite ${rotationDirection}`;
+                gearSystem.appendChild(gear);
+            }
+        }
+
+        function positionCircles() {
+            const gearSystem = document.getElementById('gearSystem');
+            const circles = document.querySelectorAll('.circle');
+            const centerX = gearSystem.offsetWidth / 2;
+            const centerY = gearSystem.offsetHeight / 2;
+            const radius = 300;
+            circles.forEach((circle, index) => {
+                const angle = (index / circles.length) * 2 * Math.PI;
+                const x = centerX + radius * Math.cos(angle) - circle.offsetWidth / 2;
+                const y = centerY + radius * Math.sin(angle) - circle.offsetHeight / 2;
+                circle.style.left = `${x}px`;
+                circle.style.top = `${y}px`;
+            });
+        }
+
+        function openPage(url) {
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>

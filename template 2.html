@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>S.M.A.R.T. MES Central Gear System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-rgou06JRKzy0wKezw+6Om4vC1D86Tc1IYAt6Lz/7pNv0MdIc9r8eUkwwB3N8A7blT5/4GcvdmCC/0n9s+3L2Og==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles.css">
+ 
+</head>
+</style>
+
+</style>
+<body>
+    <div class="gear-system" id="gearSystem">
+        <div class="central-gear">
+            <div class="central-gear-outer"></div>
+            <div class="title-container">
+                <h1 class="title">Geared for Success</h1>
+                <h2 class="subtitle">S.M.A.R.T. MES</h2>
+            </div>
+        </div>
+
+        <a href="#" class="circle" onclick="toggleContainer(1)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-cogs"></i>
+            <span class="icon-name">Production</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(2)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-wrench"></i>
+            <span class="icon-name">Maintenance</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(3)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-check-circle"></i>
+            <span class="icon-name">Quality</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(4)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-box"></i>
+            <span class="icon-name">Inventory</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(5)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-shipping-fast"></i>
+            <span class="icon-name">Shipping</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(6)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-hard-hat"></i>
+            <span class="icon-name">Safety</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(7)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-users"></i>
+            <span class="icon-name">HR</span>
+        </a>
+        <a href="#" class="circle" onclick="toggleContainer(8)">
+            <div class="icon-gear"></div>
+            <i class="fas fa-cogs"></i>
+            <span class="icon-name">Support</span>
+        </a>
+    </div>
+
+    <div id="container1" class="container">
+        <!-- Content for Production -->
+    </div>
+  
+    <div class="container" id="production-container">
+        <h3>Production Dashboard</h3>
+        <span class="close">&times;</span>
+        <input type="text" class="search-bar" placeholder="Search...">
+        <input type="file" class="file-upload">
+        <div class="dashboard-header">
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <span>John Doe - Production Manager</span>
+            </div>
+        </div>
+        
+        <div class="production-overview">
+            <div class="kpi-card">
+                <h4>OEE (Overall Equipment Effectiveness)</h4>
+                <p class="kpi-value" id="oee-value">85%</p>
+            </div>
+            <div class="kpi-card">
+                <h4>Throughput</h4>
+                <p class="kpi-value" id="throughput-value">1,200 units/hour</p>
+            </div>
+            <div class="kpi-card">
+                <h4>Cycle Time</h4>
+                <p class="kpi-value" id="cycle-time-value">3.5 minutes</p>
+            </div>
+            <div class="kpi-card">
+                <h4>Yield</h4>
+                <p class="kpi-value" id="yield-value">98.5%</p>
+            </div>
+        </div>
+
+        <div class="production-details">
+            <div class="production-chart">
+                <h4>Production Trend</h4>
+                <canvas id="production-trend-chart"></canvas>
+            </div>
+            <div class="production-table">
+                <h4>Production Line Status</h4>
+                <table id="production-line-table">
+                    <thead>
+                        <tr>
+                            <th>Line</th>
+                            <th>Status</th>
+                            <th>Efficiency</th>
+                            <th>Current Product</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="production-actions">
+            <h4>Quick Actions</h4>
+            <button class="action-button" id="schedule-maintenance">Schedule Maintenance</button>
+            <button class="action-button" id="adjust-production-rate">Adjust Production Rate</button>
+            <button class="action-button" id="quality-check">Initiate Quality Check</button>
+            <button class="action-button" id="inventory-request">Request Inventory</button>
+        </div>
+
+        <div class="production-alerts">
+            <h4>Active Alerts</h4>
+            <ul id="alert-list">
+                <!-- Alerts will be populated by JavaScript -->
+            </ul>
+        </div>
+    </div>
+    
+</body>
+</html>
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    positionCircles();
+    setupProductionDashboard();
+});
+
+function positionCircles() {
+    const gearSystem = document.getElementById('gearSystem');
+    const circles = document.querySelectorAll('.circle');
+    const centerX = gearSystem.offsetWidth / 2;
+    const centerY = gearSystem.offsetHeight / 2;
+    const radius = 300;
+
+    circles.forEach((circle, index) => {
+        const angle = (index / circles.length) * 2 * Math.PI;
+        const x = centerX + radius * Math.cos(angle) - circle.offsetWidth / 2;
+        const y = centerY + radius * Math.sin(angle) - circle.offsetHeight / 2;
+        circle.style.left = `${x}px`;
+        circle.style.top = `${y}px`;
+    });
+}
+
+function toggleContainer(index) {
+    const container = document.getElementById(`container${index}`);
+    if (container.style.display === 'none' || container.style.display === '') {
+        container.style.display = 'block';
+    } else {
+        container.style.display = 'none';
+    }
+}
+
+function setupProductionDashboard() {
+    // Set up production line table
+    const tableBody = document.querySelector('#production-line-table tbody');
+    const lines = [
+        { name: 'Line 1', status: 'Running', efficiency: '92%', product: 'Widget A' },
+        { name: 'Line 2', status: 'Maintenance', efficiency: '0%', product: 'N/A' },
+        { name: 'Line 3', status: 'Running', efficiency: '88%', product: 'Widget B' },
+        { name: 'Line 4', status: 'Idle', efficiency: '0%', product: 'N/A' },
+    ];
+
+    lines.forEach(line => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${line.name}</td>
+            <td>${line.status}</td>
+            <td>${line.efficiency}</td>
+            <td>${line.product}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    // Set up alerts
+    const alertList = document.getElementById('alert-list');
+    const alerts = [
+        'Low inventory for raw material X',
+        'Maintenance required for Machine Y',
+        'Quality issue detected in Batch Z',
+    ];
+
+    alerts.forEach(alert => {
+        const li = document.createElement('li');
+        li.textContent = alert;
+        alertList.appendChild(li);
+    });
+
+    // Set up action buttons
+    document.getElementById('schedule-maintenance').addEventListener('click', () => {
+        alert('Maintenance scheduled');
+    });
+
+    document.getElementById('adjust-production-rate').addEventListener('click', () => {
+        alert('Production rate adjusted');
+    });
+
+    document.getElementById('quality-check').addEventListener('click', () => {
+        alert('Quality check initiated');
+    });
+
+    document.getElementById('inventory-request').addEventListener('click', () => {
+        alert('Inventory request sent');
+    });
+
+    // Set up production trend chart (using Chart.js)
+    setupProductionTrendChart();
+}
+
+function setupProductionTrendChart() {
+    const ctx = document.getElementById('production-trend-chart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Production Output',
+                data: [1200, 1300, 1250, 1400, 1350, 1500],
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+
+/* styles.css */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.gear-system {
+    position: relative;
+    width: 800px;
+    height: 800px;
+  overflow: hidden; /* To ensure gears don't overflow */}
+
+.background-gear {
+    position: absolute;
+    border-radius: 50%;
+    border: 5px dashed rgba(52, 152, 219, 0.3);
+    animation: rotate 30s linear infinite;
+}
+
+.central-gear {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background-color: #3498db;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.central-gear:hover {
+    box-shadow: 0 0 30px rgba(52, 152, 219, 0.5);
+}
+
+.central-gear-outer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 20px dashed #2980b9;
+    border-radius: 50%;
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.title-container {
+    text-align: center;
+    color: white;
+}
+
+.title {
+    font-size: 28px;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 20px;
+    margin: 5px 0 0;
+}
+
+.circle {
+    position: absolute;
+     width: 120px; /* Increased from 100px */
+    height: 120px; /* Increased from 100px */
+    z-index: 10; /* Ensure icons are above background gears */
+    background-color: #e74c3c;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.circle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.5);
+}
+
+.icon-gear {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 10px dashed #c0392b;
+    border-radius: 50%;
+    animation: rotate-reverse 10s linear infinite;
+}
+
+@keyframes rotate-reverse {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.circle i {
+    font-size: 36px;
+    z-index: 1;
+}
+
+.icon-name {
+    margin-top: 5px;
+    font-size: 16px;
+    z-index: 1;
+}
+
+.container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 1000px;
+    height: 80%;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.search-bar, .file-upload {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.production-overview {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.kpi-card {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 15px;
+    width: 22%;
+    text-align: center;
+}
+
+.kpi-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3498db;
+}
+
+.production-details {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.production-chart, .production-table {
+    width: 48%;
+}
+
+.production-actions {
+    margin-bottom: 20px;
+}
+
+.action-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+    background-color: #2980b9;
+}
+
+.production-alerts ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.production-alerts li {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
