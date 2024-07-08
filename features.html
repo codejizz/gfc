@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rose Petal Animation</title>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css'>
+<style>
+/* Global Styles */
+body {
+    background-color: #000;
+    font-family: Signika Negative, Asap, sans-serif;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* ... (existing styles) ... */
+/* Title Styles */
+.title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #ff0000;
+    z-index: 1;
+}
+
+.title h1 {
+    font-size: 105px;
+    color: white;
+    margin: 0;
+    animation: pulse 3s ease-in-out infinite;
+}
+
+.title p {
+    font-size: 42px;
+    color: white;
+    margin-top: 10px;
+}
+/* Features Section Styles */
+.features-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    margin: 20px 0;
+}
+
+.feature-card {
+    flex: 0 0 auto;
+    width: 300px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+border-color: ff0000;
+    padding: 10px;
+    margin-right: 20px;
+    text-align: center;
+    box-shadow: 2 2px 5px rgba(266, 68, 80, 0.9);
+    transition: transform 0.2s ease-in-out;
+    color: #000;
+}
+
+.feature-card:hover {
+    transform: scale(1.05);
+}
+
+.feature-card i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.feature-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.feature-card p {
+    line-height: 1.5;
+}
+
+.feature-card button {
+    background-color: #ff0000;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.feature-card button:hover {
+    background-color: #222;
+}
+/* Container Styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 100vh; /* Add margin-top to push the content below the viewport */
+}
+
+/* Navigation Styles */
+nav {
+    background-color: transparent;
+    padding: 10px;
+    border-radius: 25px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+nav li {
+    margin: 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    text-shadow: 2px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+nav a:hover {
+    background-color: #ff0000;
+    color: #ffffff;
+    text-shadow: none;
+}
+
+@media (max-width: 768px) {
+    .title h1 {
+        font-size: 60px;
+    }
+}
+
+/* Title Animation */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+/* Rose Petal Styles */
+.dot {
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    background: url(https://image.ibb.co/kyUHab/rose.png);
+    background-size: 100% 100%;
+}
+
+/* Heading Styles */
+h1 {
+    font-size: 105px;
+    font-weight: bold;
+    margin-top: 40px;
+    color: #ff0000;
+    justify-content: center;
+    text-shadow: 2px 2px 4px #ff0000;
+}
+
+h2 {
+    font-size: 40px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Paragraph Styles */
+p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Carousel Styles */
+.carousel {
+    margin: 40px 0;
+    text-align: left;
+}
+
+.carousel h2 {
+    text-align: center;
+}
+
+.carousel-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: #000;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    text-align: left;
+    max-width: 500px;
+    margin: 20px;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.5);
+    background-color: #ff0000;
+    color: #fff;
+    animation: cardScale 0.3s ease;
+}
+
+/* Card Animation */
+@keyframes cardScale {
+    0% {
+        transform: scale(.8);
+    }
+    50% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+/* Game Mechanics Carousel Styles */
+.game-mechanics-carousel {
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    padding-bottom: 20px;
+}
+
+.game-mechanics-carousel .card {
+    display: inline-block;
+    margin-right: 40px;
+    white-space: normal;
+    max-width: 400px;
+}
+
+.game-mechanics-carousel::-webkit-scrollbar {
+    height: 10px;
+}
+
+.game-mechanics-carousel::-webkit-scrollbar-track {
+    background-color: #ff0000;
+}
+
+.game-mechanics-carousel::-webkit-scrollbar-thumb {
+    background-color: #ff0000;
+    border-radius: 10px;
+}
+
+.game-mechanics-carousel::-webkit-scrollbar-thumb:hover {
+    background-color: #ff0000;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 60px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+.membership-container {
+  text-align: center;
+  padding: 40px;
+
+}
+
+.membership-title {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #ff0000;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.membership-description {
+  font-size: 18px;
+  margin-bottom: 40px;
+}
+
+.membership-cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.membership-card {
+  width: 300px;
+  background-color: #000000;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.membership-card:hover {
+  transform: translateY(-5px);
+}
+
+.membership-card.gold {
+  border: 2px solid #ff0000;
+}
+
+.membership-card.platinum {
+  border: 2px solid #ff0000;
+}
+
+.membership-card.elite {
+  border: 2px solid #ff0000;
+}
+
+.card-header {
+  margin-bottom: 20px;
+}
+
+.card-header h3 {
+  font-size: 24px;
+  color: #ff0000;
+}
+
+.card-body ul {
+  list-style-type: none;
+  padding: 0;
+  text-align: left;
+}
+
+.card-body li {
+  margin-bottom: 10px;
+}
+
+.membership-container {
+  text-align: center;
+  padding: 40px;
+  background-color: #000;
+  color: #fff;
+}
+
+.membership-title {
+  font-size: 48px;
+  margin-bottom: 20px;
+  color: #ff0000;
+  text-shadow: 0 0 10px #ff0000;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    text-shadow: 0 0 10px #ff0000;
+  }
+  50% {
+    text-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000;
+  }
+  100% {
+    text-shadow: 0 0 10px #ff0000;
+  }
+}
+
+.membership-description {
+  font-size: 24px;
+  margin-bottom: 40px;
+}
+
+.membership-cards {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  perspective: 1000px;
+}
+
+.membership-card {
+  width: 400px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 30px;
+  margin: 0 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.5s;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.membership-card:hover {
+  transform: rotateY(20deg);
+}
+
+.card-header {
+  margin-bottom: 30px;
+}
+
+.card-header h3 {
+  font-size: 36px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 5px #fff;
+}
+
+.price {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ff0000;
+  margin-top: 10px;
+  text-shadow: 0 0 5px #ff0000;
+}
+
+.card-body ul {
+  list-style-type: none;
+  padding: 0;
+  text-align: left;
+}
+
+.card-body li {
+  font-size: 20px;
+  margin-bottom: 15px;
+  padding-left: 30px;
+  position: relative;
+  color: #fff;
+  text-shadow: 0 0 5px #fff;
+}
+
+.card-body li::before {
+  content: "\2605";
+  color: #ff0000;
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 24px;
+  line-height: 1;
+  text-shadow: 0 0 5px #ff0000;
+}
+
+.elite-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: -1;
+  animation: elite-glow 3s linear infinite;
+}
+
+@keyframes elite-glow {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.membership-card.elite:hover .elite-glow {
+  opacity: 0.8;
+}
+
+.membership-cta {
+  margin-top: 40px;
+}
+
+.button {
+  display: inline-block;
+  padding: 20px 40px;
+  background-color: #ff0000;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+}
+
+.button:hover {
+  transform: scale(1.1);
+}
+
+.button-text {
+  position: relative;
+  z-index: 1;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 0 5px #fff;
+}
+
+.button-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: 0;
+}
+
+.button:hover .button-hover {
+  opacity: 1;
+}
+/* Container Styles */
+#container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+</style>
+</head>
+<body translate="no">
+<!-- Main content container -->
+<div class="container">
+    <!-- Navigation menu -->
+    <nav>
+        <ul>
+            <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+            <li><a href="#membership"><i class="fas fa-gamepad"></i> Memberships</a></li>
+            <li><a href="#features"><i class="fas fa-star"></i> Features</a></li>
+            <li><a href="#interactive"><i class="fas fa-cogs"></i> Interactive Elements</a></li>
+            <li><a href="#testimonials"><i class="fas fa-book"></i> Testimonials</a></li>
+        </ul>
+    </nav>
+
+    <!-- Title section -->
+    <div class="title">
+        <h1>ROSES</h1>
+        <p>On-Demand Dating</p>
+    </div>
+
+    <!-- About section -->
+    <div class="carousel" id="about">
+        <h2>About</h2>
+        <div class="carousel-content">
+            <div class="card">
+                <p>
+                  Roses Companionship app operates a cutting-edge companionship app that redefines the dating experience for high-end professionals and discerning individuals. Unlike traditional dating platforms, Roses offers an exclusive, secure, and transparent environment where users can connect with verified companions. Think Uber but for dating!
+                </p>
+                <br>
+                <p>
+                  Our app prioritizes safety, privacy, and authenticity, ensuring that every interaction is meaningful and enjoyable. With features like user verification, advanced security measures, and a unique gift-giving system, Roses sets itself apart as the premier destination for quality companionship.
+                </p>
+            </div>
+        </div>
+    </div>
+
+  <!-- Membership section -->
+
+   <!-- Features section -->
+    <div class="carousel" id="features">
+        <h2>Unmatched Features </h2>
+        <p>Roses redefines your dating experience with a focus on security, privacy, exclusivity, and discretion.</p>
+        <div class="features-container"></div>
+    </div>
+<!-- Membership section -->
+<!-- Membership section -->
+<div class="carousel" id="membership">
+  <div class="membership-container">
+    <h2 class="membership-title">Membership Options</h2>
+    <p class="membership-description">Roses offers various membership tiers, each with unique benefits tailored to your needs. Choose the option that best suits you and unlock the full potential of the app.</p>
+    <div class="membership-cards">
+      <div class="membership-card platinum">
+        <div class="card-header">
+          <h3>Platinum</h3>
+          <p class="price">Starting at $99.99/month</p>
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>Highlighted to "Platinum Providers"</li>
+            <li>Exclusively matched with "Platinum Providers"</li>
+            <li>Platinum Client badge displayed</li>
+            <li>Exclusive customer service</li>
+            <li>Exclusive discount on next subscription renewal</li>
+            <li>Profile optimization services</li>
+            <li>1 Free Rideshare per Month</li>
+          </ul>
+        </div>
+      </div>
+      <div class="membership-card elite">
+        <div class="card-header">
+          <h3>Elite</h3>
+          <p class="price">Starting at $149.99/month</p>
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>Highlighted to "Elite Providers"</li>
+            <li>Exclusivity matched with "Elite Providers"</li>
+            <li>Priority access to new app features and updates</li>
+            <li>Two percent cashback rewards</li>
+            <li>2 Free Rideshare per Month</li>
+            <li>Unlock texting before deposit feature</li>
+            <li>Exclusive benefit for Private Meet ups, Trip getaway package</li>
+            <li>Fifty bonus digital roses once verified and have had 3 successful dates above 80% rating</li>
+            <li>"Client of the Year" award eligibility</li>
+          </ul>
+        </div>
+        <div class="elite-glow"></div>
+      </div>
+    </div>
+    <div class="membership-cta">
+      <a href="#" target="_blank" class="button">
+        <span class="button-text">Explore Membership</span>
+        <span class="button-hover"></span>
+      </a>
+    </div>
+  </div>
+</div>
+    <!-- Interactive Elements section -->
+    <div class="carousel" id="interactive">
+        <h2>Interactive Elements</h2>
+        <div class="carousel-content">
+            <div class="card">
+                <p>Engage visitors with interactive elements like buttons, forms, or quizzes. Include a standout "Play Now" or "Download Game" button.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials section -->
+    <div class="carousel" id="testimonials">
+        <h2>Testimonials</h2>
+        <div class="carousel-content">
+            <div class="card">
+                <p>"We were hesitant at first, but WE Cum Play turned out to be an unexpectedly fun and thrilling experience! The challenges pushed our boundaries in the most enjoyable way, and we were pleasantly surprised by how it spiced up our intimacy." - Sarah & Mike</p>
+            </div>
+            <div class="card">
+                <p>"This game literally saved our relationship. We were struggling to keep the spark alive, but WE Cum Play reignited our passion and brought us closer together. It's the perfect blend of excitement and intimacy." - Emily & Jacob</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container for rose petal animation -->
+<div id="container"></div>
+
+<!-- Include GSAP library -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js'></script>
+<script>
+    // Rose Petal Animation
+    document.addEventListener("DOMContentLoaded", function() {
+        TweenLite.set("#container", { perspective: 600 });
+        TweenLite.set("img", { xPercent: "-50%", yPercent: "-50%" });
+
+        var total = 30;
+        var warp = document.getElementById("container"),
+            w = window.innerWidth,
+            h = window.innerHeight;
+
+        for (i = 0; i < total; i++) {
+            var Div = document.createElement('div');
+            TweenLite.set(Div, { attr: { class: 'dot' }, x: R(0, w), y: R(-200, -150), z: R(-200, 200) });
+            warp.appendChild(Div);
+            animm(Div);
+        }
+
+        function animm(elm) {
+            TweenMax.to(elm, R(6, 15), { y: h + 100, ease: Linear.easeNone, repeat: -1, delay: -15 });
+            TweenMax.to(elm, R(4, 8), { x: '+=100', rotationZ: R(0, 180), repeat: -1, yoyo: true, ease: Sine.easeInOut });
+            TweenMax.to(elm, R(2, 8), { rotationX: R(0, 360), rotationY: R(0, 360), repeat: -1, yoyo: true, ease: Sine.easeInOut, delay: -5 });
+        };
+
+        function R(min, max) {
+            return min + Math.random() * (max - min);
+        };
+    });
+
+    // Smooth Scrolling
+    var navLinks = document.querySelectorAll('nav ul li a');
+    navLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var target = document.querySelector(this.getAttribute('href'));
+            var targetPosition = target.offsetTop;
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Features section
+    const featuresContainer = document.querySelector('.features-container');
+    const featuresData = [
+        {
+            title: "True Availability",
+            description: "Simple, only see only available users who are online, eliminating the time wasted on endless texting ."
+        },
+        {
+            title: "Authenticity Guaranteed",
+            description: "100% verified profiles ensure you connect with real people – no bots, fakes, scammers."
+        },
+{
+            title: "Personal Assistant",
+            description: "Your personal assistant takes your personality traits then handles all your chats, calendars bookings, and notifications. You focus on the date!."
+        },
+{
+            title: "On-Demand User Base",
+            description: "Caters to preference for immediacy & Unique seller position."
+        },
+{
+            title: "Exclusive invite only platform",
+            description: "Curated community of discerning clientele and providers. All vouched for by current members"
+        },
+{
+            title: "Anti-bot and fake profile protection",
+            description: "Security alogorythms in place to eliminate fraudsters. All people are verified legit providers and clients"
+        },
+{
+            title: "Optimized on-demand matching",
+            description: "Truly match up with the provider of your choice with AI matching your immediate needs"
+        },
+{
+            title: "Focus on Safety and Privacy features",
+            description: "Your information will not be found online like these other dating sites where you can be found by simply googling your number. We're discrete!"
+        },
+        // Add more features to the data array
+    ];
+
+    featuresData.forEach(feature => {
+        const card = document.createElement('div');
+        card.classList.add('feature-card');
+
+        const icon = document.createElement('i');
+        icon.classList.add('fas', 'fa-lock'); // Replace with your desired icon class
+
+        const title = document.createElement('h3');
+        title.textContent = feature.title;
+
+        const description = document.createElement('p');
+        description.textContent = feature.description;
+
+        const button = document.createElement('button');
+        button.textContent = "Learn More";
+
+        card.appendChild(icon);
+        card.appendChild(title);
+        card.appendChild(description);
+        card.appendChild(button);
+
+        featuresContainer.appendChild(card);
+    }); 
+</script>
+</body>
+</html>

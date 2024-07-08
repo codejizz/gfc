@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manufacturing Dashboard</title>
+  <style>
+    :root {
+      --primary-color: #3f51b5;
+      --secondary-color: #f50057;
+      --background-color: #f0f4f8;
+      --widget-background: #ffffff;
+      --text-color: #333333;
+      --metric-color: #666666;
+      --alert-color: #f44336;
+      --success-color: #4caf50;
+      --warning-color: #ff9800;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .factory-map {
+      width: 95%;
+      max-width: 1400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .map-container {
+      background-color: var(--widget-background);
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #factory-svg {
+      width: 100%;
+      height: auto;
+      transition: all 0.5s ease;
+    }
+
+    .map-zone {
+      fill: #e3f2fd;
+      stroke: var(--primary-color);
+      stroke-width: 2;
+      transition: fill 0.3s ease, stroke 0.3s ease;
+      filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.3)); /* Soft shadow effect */
+    }
+
+    .map-zone:hover {
+      fill: #bbdefb;
+      cursor: pointer;
+    }
+
+    .map-zone text {
+      pointer-events: none;
+    }
+
+    .map-workstation {
+      fill: #90caf9;
+      stroke: #1565c0;
+      stroke-width: 1;
+      transition: fill 0.3s ease, stroke 0.3s ease, transform 0.2s ease;
+      filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.2)); /* Soft shadow effect */
+    }
+
+    .map-workstation[data-status="operational"] {
+      fill: var(--success-color);
+    }
+
+    .map-workstation[data-status="maintenance"] {
+      fill: var(--warning-color);
+    }
+
+    .map-workstation[data-status="error"] {
+      fill: var(--alert-color);
+    }
+
+    .conveyor-belt {
+      stroke: #1565c0;
+      stroke-width: 4;
+      stroke-dasharray: 10, 5;
+      fill: none;
+    }
+
+    .equipment-details-panel {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .workstation-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--widget-background);
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      z-index: 1000;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .workstation-popup h3 {
+      color: var(--primary-color);
+      margin-top: 0;
+    }
+
+    .workstation-popup p {
+      margin: 10px 0;
+    }
+
+    .workstation-popup .status {
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    .workstation-popup .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-color);
+    }
+
+    .workstation-popup .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .workstation-popup .metric {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .workstation-popup .metric-label {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .close-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+      z-index: 1001;
+    }
+  </style>
+</head>
+<body>
+  <div class="factory-map">
+    <h1>Interactive Factory Map</h1>
+    <div class="map-container">
+      <svg id="factory-svg" viewBox="0 0 1200 600">
+        <!-- SVG map content will be inserted here -->
+      </svg>
+      <div id="equipment-details" class="equipment-details-panel"></div>
+    </div>
+  </div>
+  <button id="close-zoom" class="close-button">Close Zoom</button>
+
+  <script>
+    // JavaScript for interactive factory map
+    function createFactoryMap() {
+      const svg = document.getElementById('factory-svg');
+      const zones = [
+        {id: 'photolithography', name: 'Photolithography', x: 50, y: 50, width: 300, height: 150},
+        {id: 'etching', name: 'Etching', x: 400, y: 50, width: 200, height: 150},
+        {id: 'deposition', name: 'Deposition', x: 650, y: 50, width: 200, height: 150},
+        {id: 'ion-implantation', name: 'Ion Implantation', x: 50, y: 250, width: 300, height: 150},
+        {id: 'testing', name: 'Testing', x: 400, y: 250, width: 200, height: 150},
+        {id: 'assembly', name: 'Assembly', x: 650, y: 250, width: 200, height: 150},
+        {id: 'packaging', name: 'Packaging', x: 50, y: 450, width: 300, height: 150},
+        {id: 'cleaning', name: 'Cleaning', x: 400, y: 450, width: 200, height: 150},
+        {id: 'warehouse', name: 'Warehouse', x: 650, y: 450, width: 200, height: 150}
+      ];
+
+      zones.forEach(zone => {
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        group.setAttribute('id', zone.id);
+        group.setAttribute('class', 'map-zone');
+
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', zone.x);
+        rect.setAttribute('y', zone.y);
+        rect.setAttribute('width', zone.width);
+        rect.setAttribute('height', zone.height);
+        
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', zone.x + zone.width / 2);
+        text.setAttribute('y', zone.y + 30);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('fill', '#333333');
+        text.setAttribute('font-size', '16px');
+        text.textContent = zone.name;
+
+        group.appendChild(rect);
+        group.appendChild(text);
+        svg.appendChild(group);
+
+        addEquipmentToZone(svg, zone);
+      });
+
+      addConveyorBelts(svg, zones);
+      addMapInteractivity(svg, zones);
+    }
+
+    function addEquipmentToZone(svg, zone) {
+      const equipmentCount = Math.floor(Math.random() * 5) + 3; // 3 to 7 pieces of equipment
+      const equipmentStatuses = ['operational', 'maintenance', 'error'];
+      const cols = Math.floor(zone.width / 60);
+      const rows = Math.floor((zone.height - 40) / 60);
+
+      for (let i = 0; i < equipmentCount; i++) {
+        const row = Math.floor(i / cols);
+        const equipment = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        equipment.setAttribute('x', zone.x + 20 + (i % cols) * 60);
+        equipment.setAttribute('y', zone.y + 50 + row * 60);
+        equipment.setAttribute('width', 40);
+        equipment.setAttribute('height', 40);
+        equipment.setAttribute('class', 'map-workstation');
+        equipment.setAttribute('data-status', equipmentStatuses[Math.floor(Math.random() * equipmentStatuses.length)]);
+        equipment.setAttribute('data-id', `${zone.id.toUpperCase()}-${i + 1}`);
+        svg.appendChild(equipment);
+      }
+    }
+
+    function addConveyorBelts(svg, zones) {
+      const conveyorPaths = [
+        `M${zones[0].x + zones[0].width} ${zones[0].y + zones[0].height / 2} H${zones[1].x}`,
+        `M${zones[1].x + zones[1].width} ${zones[1].y + zones[1].height / 2} H${zones[2].x}`,
+        `M${zones[0].x + zones[0].width / 2} ${zones[0].y + zones[0].height} V${zones[3].y}`,
+        `M${zones[3].x + zones[3].width} ${zones[3].y + zones[3].height / 2} H${zones[4].x}`,
+        `M${zones[4].x + zones[4].width} ${zones[4].y + zones[4].height / 2} H${zones[5].x}`,
+        `M${zones[6].x + zones[6].width} ${zones[6].y + zones[6].height / 2} H${zones[7].x}`,
+        `M${zones[7].x + zones[7].width} ${zones[7].y + zones[7].height / 2} H${zones[8].x}`
+      ];
+
+      conveyorPaths.forEach(path => {
+        const conveyor = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        conveyor.setAttribute('d', path);
+        conveyor.setAttribute('class', 'conveyor-belt');
+        svg.appendChild(conveyor);
+      });
+    }
+
+    function addMapInteractivity(svg, zones) {
+      zones.forEach(zone => {
+        const zoneElement = document.getElementById(zone.id);
+        zoneElement.addEventListener('click', () => showZoneDetails(zone));
+      });
+
+      svg.querySelectorAll('.map-workstation').forEach(equipment => {
+        equipment.addEventListener('click', (e) => {
+          e.stopPropagation(); // Prevent zone click event
+          zoomToWorkstation(equipment);
+        });
+        equipment.addEventListener('mouseenter', (e) => showEquipmentDetails(equipment, e));
+        equipment.addEventListener('mouseleave', hideEquipmentDetails);
+      });
+
+      document.getElementById('close-zoom').addEventListener('click', resetZoom);
+    }
+
+    function showZoneDetails(zone) {
+      const equipmentCount = document.querySelectorAll(`#${zone.id} .map-workstation`).length;
+      const detailsPanel = document.createElement('div');
+      detailsPanel.className = 'zone-details-panel';
+      detailsPanel.innerHTML = `
+        <h3>${zone.name}</h3>
+        <p>Status: Operational</p>
+        <p>Equipment Count: ${equipmentCount}</p>
+        <p>Current Efficiency: ${Math.floor(Math.random() * 30 + 70)}%</p>
+        <button onclick="this.parentElement.remove()">Close</button>
+      `;
+      document.body.appendChild(detailsPanel);
+    }
+
+    function zoomToWorkstation(equipment) {
+      const svg = document.getElementById('factory-svg');
+      const rect = equipment.getBoundingClientRect();
+      const svgRect = svg.getBoundingClientRect();
+
+      const scale = Math.min(svgRect.width / rect.width, svgRect.height / rect.height) * 0.3; // Reduced zoom level
+      const x = (rect.left + rect.right) / 2 - svgRect.left;
+      const y = (rect.top + rect.bottom) / 2 - svgRect.top;
+
+      svg.style.transform = `scale(${scale}) translate(${-x}px, ${-y}px)`;
+      svg.style.transformOrigin = 'center center';
+
+      document.getElementById('close-zoom').style.display = 'block';
+      showWorkstationPopup(equipment);
+    }
+
+    function resetZoom() {
+      const svg = document.getElementById('factory-svg');
+      svg.style.transform = 'none';
+      document.getElementById('close-zoom').style.display = 'none';
+      const popup = document.querySelector('.workstation-popup');
+      if (popup) popup.remove();
+    }
+
+    function showEquipmentDetails(equipment, event) {
+      const detailsPanel = document.getElementById('equipment-details');
+      const status = equipment.getAttribute('data-status');
+      const id = equipment.getAttribute('data-id');
+      
+      detailsPanel.innerHTML = `
+        <strong>ID: ${id}</strong><br>
+        Status: ${status}<br>
+        Uptime: ${Math.floor(Math.random() * 24)} hours
+      `;
+      
+      const rect = equipment.getBoundingClientRect();
+      const container = document.querySelector('.map-container').getBoundingClientRect();
+      
+      detailsPanel.style.left = `${rect.left - container.left + rect.width / 2}px`;
+      detailsPanel.style.top = `${rect.top - container.top - 60}px`;
+      detailsPanel.style.opacity = '1';
+
+      // Glow effect based on status
+      switch (status) {
+        case 'operational':
+          equipment.style.filter = 'drop-shadow(0 0 8px var(--success-color))';
+          break;
+        case 'maintenance':
+          equipment.style.filter = 'drop-shadow(0 0 8px var(--warning-color))';
+          break;
+        case 'error':
+          equipment.style.filter = 'drop-shadow(0 0 8px var(--alert-color))';
+          break;
+        default:
+          equipment.style.filter = 'none';
+      }
+    }
+
+    function hideEquipmentDetails() {
+      const detailsPanel = document.getElementById('equipment-details');
+      detailsPanel.style.opacity = '0';
+
+      // Reset glow effect
+      this.style.filter = 'none';
+    }
+
+    function showWorkstationPopup(equipment) {
+      const status = equipment.getAttribute('data-status');
+      const id = equipment.getAttribute('data-id');
+      const popup = document.createElement('div');
+      popup.className = 'workstation-popup';
+      popup.innerHTML = `
+        <button class="close-button" onclick="this.parentElement.remove(); resetZoom();">&times;</button>
+        <h3>Workstation ${id}</h3>
+        <p>Status: <span class="status" style="color: ${getStatusColor(status)}">${status}</span></p>
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-label">Uptime</div>
+            <div class="metric-value">${Math.floor(Math.random() * 24)} hours</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Efficiency</div>
+            <div class="metric-value">${Math.floor(Math.random() * 30 + 70)}%</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Output</div>
+            <div class="metric-value">${Math.floor(Math.random() * 100 + 100)} units/hour</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Next Maintenance</div>
+            <div class="metric-value">${Math.floor(Math.random() * 30 + 1)} days</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Operator</div>
+            <div class="metric-value">John Doe</div> <!-- Replace with actual operator name -->
+          </div>
+          <div class="metric">
+            <div class="metric-label">Lot</div>
+            <div class="metric-value">12345</div> <!-- Replace with actual lot number -->
+          </div>
+          <div class="metric">
+            <div class="metric-label">Lot Size</div>
+            <div class="metric-value">1000 units</div> <!-- Replace with actual lot size -->
+          </div>
+        </div>
+      `;
+      document.body.appendChild(popup);
+    }
+
+    function getStatusColor(status) {
+      switch (status) {
+        case 'operational':
+          return 'var(--success-color)';
+        case 'maintenance':
+          return 'var(--warning-color)';
+        case 'error':
+          return 'var(--alert-color)';
+        default:
+          return 'var(--text-color)';
+      }
+    }
+
+    // Initialize the factory map
+    createFactoryMap();
+  </script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Maintenance Dashboard</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background-color: #f0f4f8; /* Light silver-blue background */
+        color: #2c3e50; /* Dark blue-grey text color */
+    }
+
+    .container {
+        width: 95%;
+        margin: 20px auto;
+        padding: 20px;
+        background: #ffffff; /* White background */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #34495e; /* Dark blue-grey */
+    }
+
+    /* Dashboard Header */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .user-profile {
+        display: flex;
+        align-items: center;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #3498db; /* Blue */
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    /* Overview Panel */
+    .overview-panel {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+        gap: 20px;
+    }
+
+    .metric {
+        background: #ecf0f1; /* Light silver */
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        flex: 1;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .metric h4 {
+        margin-bottom: 10px;
+        color: #34495e; /* Dark blue-grey */
+    }
+
+    .large-number {
+        font-size: 2em;
+        font-weight: bold;
+        color: #3498db; /* Blue */
+    }
+
+    /* Search and Filter */
+    .search-filter {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .search-bar {
+        width: 70%;
+        padding: 10px;
+        border: 1px solid #bdc3c7; /* Light grey */
+        border-radius: 4px;
+    }
+
+    .filter-dropdown {
+        width: 28%;
+        padding: 10px;
+        border: 1px solid #bdc3c7; /* Light grey */
+        border-radius: 4px;
+    }
+
+    /* Machine Grid */
+    .machine-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .machine-item {
+        background: #ffffff; /* White */
+        padding: 20px;
+        border: 1px solid #ecf0f1; /* Light silver */
+        border-radius: 8px;
+        flex: 1 0 calc(30% - 15px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .machine-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .machine-details {
+        margin-bottom: 10px;
+    }
+
+    .machine-actions {
+        text-align: right;
+    }
+
+    .action-button {
+        padding: 10px 15px;
+        border: none;
+        background: #3498db; /* Blue */
+        color: #ffffff;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .action-button:hover {
+        background: #2980b9; /* Darker blue */
+    }
+
+    .andon-light {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-left: 5px;
+    }
+
+    .green { background: #2ecc71; }
+    .red { background: #e74c3c; }
+    .yellow { background: #f1c40f; }
+
+    /* Maintenance Schedule */
+    .maintenance-schedule {
+        background: #ffffff; /* White */
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ecf0f1; /* Light silver */
+    }
+
+    .maintenance-schedule table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .maintenance-schedule th, .maintenance-schedule td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ecf0f1; /* Light silver */
+    }
+
+    .status {
+        padding: 5px 10px;
+        border-radius: 4px;
+        color: #ffffff;
+    }
+
+    .status.upcoming { background: #e67e22; }
+    .status.scheduled { background: #3498db; /* Blue */ }
+
+    /* Alerts Panel */
+    .alerts-panel {
+        background: #ffffff; /* White */
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ecf0f1; /* Light silver */
+    }
+
+    .alert-list {
+        list-style: none;
+    }
+
+    .alert {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+    }
+
+    .alert-time {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .alert-message {
+        flex: 1;
+    }
+
+    .alert.critical { background: #e74c3c; color: #ffffff; }
+    .alert.warning { background: #f39c12; color: #ffffff; }
+    .alert.info { background: #3498db; /* Blue */ color: #ffffff; }
+
+    /* Quick Actions */
+    .quick-actions {
+        background: #ffffff; /* White */
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ecf0f1; /* Light silver */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .quick-actions h3 {
+        width: 100%;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .quick-actions .action-button {
+        flex: 1 1 calc(50% - 10px);
+        max-width: calc(50% - 10px);
+    }
+
+    /* Data Visualization */
+    .data-visualization {
+        background: #ffffff; /* White */
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ecf0f1; /* Light silver */
+    }
+
+    #performance-chart {
+        height: 300px;
+        width: 100%;
+    }
+
+    /* File Upload */
+    .file-upload {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .file-upload label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .file-upload input[type="file"] {
+        display: inline-block;
+        padding: 10px;
+        border: 1px solid #bdc3c7; /* Light grey */
+        border-radius: 4px;
+    }
+
+    /* New Sections */
+    .predictive-maintenance, .cost-analysis, .inventory-status {
+        background: #ffffff; /* White */
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ecf0f1; /* Light silver */
+    }
+
+    .prediction-list, .cost-list, .inventory-list {
+        list-style: none;
+    }
+
+    .prediction-item, .cost-item, .inventory-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ecf0f1; /* Light silver */
+    }
+
+    .savings-amount {
+        font-size: 2em;
+        font-weight: bold;
+        color: #2ecc71; /* Green */
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .machine-item, .metric {
+            flex: 1 0 100%;
+        }
+
+        .search-filter {
+            flex-direction: column;
+        }
+
+        .search-bar, .filter-dropdown {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .quick-actions .action-button {
+            flex: 1 1 100%;
+            max-width: 100%;
+        }
+    }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="dashboard-header">
+        <h2>Executive Maintenance Dashboard</h2>
+        <div class="user-profile">
+            <div class="user-avatar">JD</div>
+            <span>John Doe - Plant Manager</span>
+        </div>
+    </div>
+
+    <div class="overview-panel">
+        <div class="metric">
+            <h4>Overall Equipment Effectiveness (OEE)</h4>
+            <p class="large-number">78%</p>
+            <p>Last updated: 2024-06-27</p>
+            <p>Target: 85%</p>
+        </div>
+        <div class="metric">
+            <h4>Active Machines</h4>
+            <p class="large-number">18/20</p>
+            <p>Online: 90%</p>
+            <p>Offline: 10%</p>
+        </div>
+        <div class="metric">
+            <h4>Pending Maintenance</h4>
+            <p class="large-number">3</p>
+            <p>Critical: 1</p>
+            <p>Non-Critical: 2</p>
+        </div>
+        <div class="metric">
+            <h4>Monthly Downtime</h4>
+            <p class="large-number">24h</p>
+            <p>Target: 18h</p>
+            <p>Last Month: 28h</p>
+        </div>
+    </div>
+
+    <div class="search-filter">
+        <input type="text" class="search-bar" placeholder="Search machines...">
+        <select class="filter-dropdown">
+            <option value="">Filter by status...</option>
+            <option value="online">Online</option>
+            <option value="offline">Offline</option>
+            <option value="maintenance">Maintenance</option>
+        </select>
+    </div>
+
+    <div class="machine-grid">
+        <div class="machine-item">
+            <div class="machine-header">
+                <h3>Machine A101</h3>
+                <div class="andon-light green"></div>
+            </div>
+            <div class="machine-details">
+                <p>Status: Online</p>
+                <p>Last Maintenance: 2024-06-20</p>
+                <p>Efficiency: 92%</p>
+            </div>
+            <div class="machine-actions">
+                <button class="action-button">View Details</button>
+                <button class="action-button">Schedule Maintenance</button>
+            </div>
+        </div>
+        <div class="machine-item">
+            <div class="machine-header">
+                <h3>Machine A102</h3>
+                <div class="andon-light yellow"></div>
+            </div>
+            <div class="machine-details">
+                <p>Status: Maintenance</p>
+                <p>Last Maintenance: 2024-06-15</p>
+                <p>Efficiency: 78%</p>
+            </div>
+            <div class="machine-actions">
+                <button class="action-button">View Details</button>
+                <button class="action-button">Schedule Maintenance</button>
+            </div>
+        </div>
+        <div class="machine-item">
+            <div class="machine-header">
+                <h3>Machine A103</h3>
+                <div class="andon-light red"></div>
+            </div>
+            <div class="machine-details">
+                <p>Status: Offline</p>
+                <p>Last Maintenance: 2024-06-25</p>
+                <p>Downtime: 48h</p>
+            </div>
+            <div class="machine-actions">
+                <button class="action-button">View Details</button>
+                <button class="action-button">Schedule Maintenance</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="maintenance-schedule">
+        <h3>Maintenance Schedule</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Machine</th>
+                    <th>Maintenance Type</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Machine A101</td>
+                    <td>Routine Check</td>
+                    <td>2024-07-05</td>
+                    <td><span class="status scheduled">Scheduled</span></td>
+                </tr>
+                <tr>
+                    <td>Machine A102</td>
+                    <td>Major Overhaul</td>
+                    <td>2024-07-10</td>
+                    <td><span class="status upcoming">Upcoming</span></td>
+                </tr>
+                <tr>
+                    <td>Machine A103</td>
+                    <td>Emergency Repair</td>
+                    <td>2024-06-30</td>
+                    <td><span class="status scheduled">Scheduled</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alerts-panel">
+        <h3>Real-Time Alerts</h3>
+        <ul class="alert-list">
+            <li class="alert critical">
+                <span class="alert-time">10:15 AM</span>
+                <span class="alert-message">Machine A103 unexpected shutdown. Maintenance required.</span>
+            </li>
+            <li class="alert warning                
+<span class="alert-time">09:45 AM</span>
+                <span class="alert-message">Machine A102 efficiency drop detected. Scheduled maintenance pending.</span>
+            </li>
+            <li class="alert info">
+                <span class="alert-time">08:30 AM</span>
+                <span class="alert-message">New update available for machine management software.</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="action-button">Add New Machine</button>
+        <button class="action-button">Generate Report</button>
+        <button class="action-button">Update Software</button>
+        <button class="action-button">Contact Support</button>
+    </div>
+
+    <div class="data-visualization">
+        <h3>Performance Chart</h3>
+        <canvas id="performance-chart"></canvas>
+    </div>
+
+    <div class="file-upload">
+        <label for="file-upload">Upload Maintenance Data</label>
+        <input type="file" id="file-upload">
+    </div>
+
+    <!-- New Sections -->
+    <div class="predictive-maintenance">
+        <h3>Predictive Maintenance</h3>
+        <ul class="prediction-list">
+            <li class="prediction-item">
+                <span>Machine A101 - Expected Maintenance: 2024-07-01</span>
+                <span>Status: <span class="status upcoming">Upcoming</span></span>
+            </li>
+            <li class="prediction-item">
+                <span>Machine A102 - Expected Maintenance: 2024-07-15</span>
+                <span>Status: <span class="status upcoming">Upcoming</span></span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="cost-analysis">
+        <h3>Cost Analysis</h3>
+        <ul class="cost-list">
+            <li class="cost-item">
+                <span>Total Maintenance Cost - June</span>
+                <span class="savings-amount">$15,000</span>
+            </li>
+            <li class="cost-item">
+                <span>Estimated Savings - July</span>
+                <span class="savings-amount">$5,000</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="inventory-status">
+        <h3>Inventory Status</h3>
+        <ul class="inventory-list">
+            <li class="inventory-item">
+                <span>Spare Parts - Available</span>
+                <span>120 units</span>
+            </li>
+            <li class="inventory-item">
+                <span>Lubricants - Available</span>
+                <span>50 gallons</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Chart.js
+        const ctx = document.getElementById('performance-chart').getContext('2d');
+        const performanceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [{
+                    label: 'OEE',
+                    data: [80, 82, 78, 76, 74, 78],
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
